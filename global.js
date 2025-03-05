@@ -141,3 +141,64 @@ d3.json("data.json").then(data => {
         });
 
 })
+
+
+// **Gait-Animation Prototype**
+
+// Load JSON data
+d3.json("park1.json").then(data => {
+    let patient = data[0]; // Use the first patient in the file
+
+    // Convert gait parameters to milliseconds
+    let leftStride = patient.left_stride * 1000;
+    let rightStride = patient.right_stride * 1000;
+    let leftSwing = patient.left_swing * 1000;
+    let rightSwing = patient.right_swing * 1000;
+
+    // Select SVG
+    let svg = d3.select("#gait-animation")
+        .attr("width", 200)  // Set fixed width
+        .attr("height", 200) // Set fixed height
+        .style("display", "block")
+        .style("margin", "auto");
+
+    let width = +svg.attr("width"), height = +svg.attr("height");
+
+    // Base position for ground (near the bottom of the SVG)
+    let groundY = height - 20;
+
+    // Adjust foot positions (left and right) to be centered horizontally
+    let leftFoot = svg.append("circle")
+        .attr("cx", width / 2 - 50)  // Place left foot slightly left of center
+        .attr("cy", groundY)         // On the ground
+        .attr("r", 25)               // Set larger radius for visibility
+        .attr("fill", "black");
+
+    let rightFoot = svg.append("circle")
+        .attr("cx", width / 2 + 50)  // Place right foot slightly right of center
+        .attr("cy", groundY)         // On the ground
+        .attr("r", 25)               // Set larger radius for visibility
+        .attr("fill", "black");
+
+    // Walking animation function
+    function animateFeet() {
+        // Left foot movement (swing up and down)
+        leftFoot.transition().duration(leftSwing)
+            .attr("cy", groundY - 30)  // Lift up during swing (increase height)
+            .transition().duration(leftStride - leftSwing)
+            .attr("cy", groundY);      // Return to ground
+
+        // Right foot movement (delayed)
+        rightFoot.transition().delay(leftStride / 2).duration(rightSwing)
+            .attr("cy", groundY - 30)  // Lift up during swing (increase height)
+            .transition().duration(rightStride - rightSwing)
+            .attr("cy", groundY);      // Return to ground
+    }
+
+    // Loop animation
+    setInterval(animateFeet, Math.max(leftStride, rightStride));
+    animateFeet(); // Start animation
+});
+
+
+
