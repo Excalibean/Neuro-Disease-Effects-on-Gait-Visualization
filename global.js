@@ -1,8 +1,6 @@
 console.log("Its Alive");
 
 d3.json("data.json").then(data => {
-    console.log(data);
-
     // Set dimensions
     const width = 800, height = 450, margin = { top: 40, right: 30, bottom: 50, left: 60 };
 
@@ -215,4 +213,124 @@ d3.select("#file-selector").on("change", function() {
 });
 
 
+// ** main vis prototype **
+function animate_footprints(file, datasetIndex) {
+    d3.json(file).then(data => {
+        const margin = { top: 20, right: 20, bottom: 50, left: 70 };
+        const width = 600 - margin.left - margin.right;
+        const height = 350 - margin.top - margin.bottom;
+       
+        // Set up the SVG container
+        const svg = d3.select("#walking-path")
+                        .html("") // Clears previous content
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("height", height + margin.top + margin.bottom)
+                        .append("g")
+                        .attr("transform", `translate(${margin.left},${margin.top})`);
+    
+        // Scale for the X and Y axes
+        const xScale = d3.scaleLinear().domain([0, 500]).range([0, width]);
+        const yScale = d3.scaleLinear().domain([0, 2]).range([height, 0]);
+    
+        // Create x and y axis
+        const xAxis = svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(xScale));
+    
+        const yAxis = svg.append("g")
+            .call(d3.axisLeft(yScale));
+    
+        // Add x-axis label
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", height + 40) // Adjusted for visibility
+            .style("text-anchor", "middle")
+            .text("Time (ms)");
+    
+        // Add y-axis label
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -height / 2)
+            .attr("y", -40)
+            .style("text-anchor", "middle")
+            .text("Foot Position (m)");
 
+        // Get color for this dataset
+        const footColor = datasetColors[datasetIndex % datasetColors.length];
+        
+        // Create circles for each foot
+        const leftFoot = svg.append("circle")
+            .attr("class", "foot")
+            .attr("r", 5)
+            .attr("fill", footColor)
+            .attr("cx", xScale(data[0].x_left))
+            .attr("cy", yScale(data[0].y_left));
+    
+        const rightFoot = svg.append("circle")
+            .attr("class", "right-foot")
+            .attr("r", 5)
+            .attr("fill", footColor)
+            .attr("cx", xScale(data[0].x_right))
+            .attr("cy", yScale(data[0].y_right));
+
+        // Function to update foot positions over time
+        function updateFootPosition(index) {
+            if (index >= data.length) {
+                setTimeout(loadNextDataset, 1000);
+                return;
+            }
+    
+            // Get the time for the current data point
+            const currentTime = data[index].time;
+            console.log(currentTime)
+
+            // TEMP stop after 10 seconds
+            if (currentTime > 10) {
+                setTimeout(loadNextDataset, 1000);
+                return;
+            }
+    
+            // Update positions of the feet based on the current data point
+            leftFoot.transition()
+                .duration(currentTime / 100000)
+                .attr("cx", xScale(data[index].x_left))
+                .attr("cy", yScale(data[index].y_left));
+    
+            rightFoot.transition()
+                .duration(currentTime / 100000)
+                .attr("cx", xScale(data[index].x_right))
+                .attr("cy", yScale(data[index].y_right));
+    
+            // Call the next data point after a short delay
+            setTimeout(() => updateFootPosition(index + 1), currentTime / 100000); // divide by large number quicken speed
+        }
+    
+        // Start the animation
+        updateFootPosition(0);
+    
+    })
+}
+
+const datasets = [
+    "./gait_coordinates/control1_coord.json",
+    "./gait_coordinates/als1_coord.json",
+    "./gait_coordinates/park1_coord.json",
+    "./gait_coordinates/hunt1_coord.json"
+];
+
+const datasetColors = ["green", "purple", "red", "blue"];
+let currentDatasetIndex = 0; // Track which dataset is being played
+
+// Function to load the next dataset
+function loadNextDataset() {
+    currentDatasetIndex++;
+
+    if (currentDatasetIndex < datasets.length) {
+        animate_footprints(datasets[currentDatasetIndex], currentDatasetIndex);
+    } else {
+        console.log("All animations completed.");
+    }
+}
+
+// Start with the first dataset
+animate_footprints(datasets[currentDatasetIndex], currentDatasetIndex);
