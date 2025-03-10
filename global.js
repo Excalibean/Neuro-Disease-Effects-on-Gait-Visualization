@@ -245,7 +245,7 @@ function animate_footprints(file, datasetIndex) {
             .attr("x", width / 2)
             .attr("y", height + 40) // Adjusted for visibility
             .style("text-anchor", "middle")
-            .text("Time (ms)");
+            .text("Time (s)");
     
         // Add y-axis label
         svg.append("text")
