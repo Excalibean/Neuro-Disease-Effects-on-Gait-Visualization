@@ -283,12 +283,6 @@ function animateWalkingPaths(files, svgIds, yOffset = 0, labelTexts = []) {
                 .attr("transform", `translate(0, ${height})`)
                 .call(d3.axisBottom(xScale));
 
-            // Add x-axis label
-            svg.append("text")
-                .attr("x", width / 2)
-                .attr("y", height + 20) // Adjusted for visibility
-                .style("text-anchor", "middle")
-                .text("Time (s)");
 
             // Add label text
             svg.append("text")
@@ -361,11 +355,11 @@ animateWalkingPaths(
 
 let step = 0;
 const descriptions = [
-    "This is the Gait of a healthy person",
-    "Gait refers to the manner or pattern of walking.",
-    "This is the Gait of a person with Parkinson's Disease",
-    "This is the Gait of a person with Huntington's Disease",
-    "This is the Gait of a person with Alzheimer's Disease"
+    "Gait refers to the manner or pattern of walking.\nYour Gait includes the way you walk, your stride length, step width, hip sway, arm sways and walking speed.",
+    "This is the pace of a Healthy Person.",
+    "This is the pace of a person with Parkinson's Disease. \nA neurological disorder that affects movement.\nIt is typically characterized by tremors, stiffness, slowness and impaired balance.",
+    "Other neurological disorders such as Huntington's Disease also affect Gait due to uncontrollable movement and loss of motor control.",
+    "Changes in Gait take many variations whether it's simply walking slower, lack of an arm swing on a single side, shuffling, a forward lean causing quicker steps, and more."
 ];
 const files = [
     "./gait_coordinates/control1_coord.json",
@@ -388,39 +382,39 @@ const labelTexts = [
 
 d3.select("#visualization-container").on("click", function() {
     step++;
-    if (step < descriptions.length) {
-        d3.select("#description").text(descriptions[step]);
-        if (step === 1) {
-            d3.select("#description-container")
+    if (step === 1) {
+        d3.select("#description").text(descriptions[0]);
+    } else if (step === 2) {
+        d3.select("#description").text(descriptions[1]);
+        d3.select("#combined-walking-path")
+            .transition()
+            .duration(500)
+            .style("opacity", 1);
+        animateWalkingPaths(files.slice(0, 1), svgIds.slice(0, 1), 0, labelTexts.slice(0, 1));
+    } else if (step === 3) {
+        d3.select("#description").text(descriptions[2]);
+        d3.select("#description-container")
                 .transition()
-                .duration(1000)
-                .style("top", "10px")
-                .style("right", "10px")
-                .style("transform", "translate(0, 0)")
-                .on("end", function() {
-                    d3.select("#combined-walking-path")
-                        .transition()
-                        .delay(500) // Add delay to ensure smooth transition
-                        .duration(1000)
-                        .style("opacity", 1);
-                    animateWalkingPaths(files.slice(0, 1), svgIds.slice(0, 1), 0, labelTexts.slice(0, 1));
-                });
-        } else if (step === 2) {
-            d3.select("#combined-walking-path").style("transform", "translateY(-50px)");
-            d3.select("#second-walking-path").style("opacity", 1);
-            animateWalkingPaths(files.slice(0, 2), svgIds.slice(0, 2), 0, labelTexts.slice(0, 2));
-        } else if (step === 3) {
-            d3.select("#combined-walking-path").style("transform", "translateY(-150px)");
-            d3.select("#second-walking-path").style("transform", "translateY(-100px)");
-            d3.select("#third-walking-path").style("opacity", 1);
-            animateWalkingPaths(files.slice(0, 3), svgIds.slice(0, 3), 0, labelTexts.slice(0, 3));
-        } else if (step === 4) {
-            d3.select("#combined-walking-path").style("transform", "translateY(-250px)");
-            d3.select("#second-walking-path").style("transform", "translateY(-200px)");
-            d3.select("#third-walking-path").style("transform", "translateY(-100px)");
-            d3.select("#fourth-walking-path").style("opacity", 1);
-            animateWalkingPaths(files, svgIds, 0, labelTexts);
-        }
+                .duration(300)
+                .style("top", "80px")
+                .style("right", "80px")
+                .style("transform", "translate(0, 0)");
+        d3.select("#combined-walking-path").style("transform", "translateY(-150px)");
+        d3.select("#second-walking-path").style("opacity", 1);
+        animateWalkingPaths(files.slice(0, 2), svgIds.slice(0, 2), 0, labelTexts.slice(0, 2));
+    } else if (step === 4) {
+        d3.select("#description").text(descriptions[3]);
+        d3.select("#combined-walking-path").style("transform", "translateY(-250px)");
+        d3.select("#second-walking-path").style("transform", "translateY(-100px)");
+        d3.select("#third-walking-path").style("opacity", 1);
+        animateWalkingPaths(files.slice(0, 3), svgIds.slice(0, 3), 0, labelTexts.slice(0, 3));
+    } else if (step === 5) {
+        d3.select("#description").text(descriptions[4]);
+        d3.select("#combined-walking-path").style("transform", "translateY(-350px)");
+        d3.select("#second-walking-path").style("transform", "translateY(-200px)");
+        d3.select("#third-walking-path").style("transform", "translateY(-100px)");
+        d3.select("#fourth-walking-path").style("opacity", 1);
+        animateWalkingPaths(files, svgIds, 0, labelTexts);
     } else {
         d3.select("#visualization-container").style("pointer-events", "none");
     }

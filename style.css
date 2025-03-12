@@ -24,7 +24,7 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    height: 600px; /* Adjust height to accommodate all four graphs */
+    height: 800px; /* Adjust height to accommodate all four graphs */
 }
 
 .graph-container {
@@ -75,6 +75,11 @@ svg#fourth-walking-path {
     display: block;
     margin: auto;
     transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+svg#combined-walking-path {
+    opacity: 0; /* Ensure the first graph is initially hidden */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
 svg#second-walking-path {
