@@ -148,3 +148,30 @@ label {
     margin-right: 0;
 }
 
+#scroll-prompt {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    font-size: 16px;
+    color: #333;
+    position: absolute;
+    bottom: 200px; /* Adjust this value to move the prompt higher or lower */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+#scroll-prompt .arrow {
+    display: inline-block;
+    margin: 0 10px;
+    font-size: 20px;
+    vertical-align: middle;
+    transform: rotate(90deg); /* Rotate to point downwards */
+}
+
+#scroll-prompt .left-arrow {
+    transform: rotate(90deg); /* Rotate to point downwards */
+}
+
+#scroll-prompt .right-arrow {
+    transform: rotate(90deg); /* Rotate to point downwards */
+}

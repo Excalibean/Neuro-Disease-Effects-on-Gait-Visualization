@@ -415,6 +415,12 @@ d3.select("#visualization-container").on("click", function() {
         d3.select("#third-walking-path").style("transform", "translateY(-100px)");
         d3.select("#fourth-walking-path").style("opacity", 1);
         animateWalkingPaths(files, svgIds, 0, labelTexts);
+
+        // scroll down prompt
+        d3.select("#scroll-prompt")
+            .transition()
+            .duration(1000)
+            .style("opacity", 1);
     } else {
         d3.select("#visualization-container").style("pointer-events", "none");
     }
