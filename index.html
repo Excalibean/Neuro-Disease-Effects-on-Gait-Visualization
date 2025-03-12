@@ -11,11 +11,6 @@
 <body>
     <h1>Final Project Prototype</h1>
 
-    <div id="chart-container">
-        <svg id="chart"></svg>
-    </div>
-
-    <div id="tooltip"></div>
     <div id="gait-animation-container">
         <select id="file-selector">
             <option value="control1.json">Control (Healthy)</option>
@@ -28,9 +23,31 @@
     </div>
 
     <h2>Walking Path Comparison</h2>
-    <div id="walking-path-container">
-        <svg id="walking-path"></svg>
+
+    <div>
+        <label for="file1">Select Disease 1:</label>
+        <select id="file1">
+            <option value="./gait_coordinates/control1_coord.json">Control</option>
+            <option value="./gait_coordinates/als1_coord.json">ALS</option>
+            <option value="./gait_coordinates/park1_coord.json">Parkinson's</option>
+            <option value="./gait_coordinates/hunt1_coord.json">Huntington's</option>
+        </select>
+    
+        <label for="file2">Select Disease 2:</label>
+        <select id="file2">
+            <option value="./gait_coordinates/control1_coord.json">Control</option>
+            <option value="./gait_coordinates/als1_coord.json">ALS</option>
+            <option value="./gait_coordinates/park1_coord.json">Parkinson's</option>
+            <option value="./gait_coordinates/hunt1_coord.json">Huntington's</option>
+        </select>
+    
+        <button onclick="startAnimation()">Animate</button>
     </div>
+
+    <div id="walking-path-container">
+        <svg id="walking-path1"></svg>
+        <svg id="walking-path2"></svg>
+    </div> 
     
     <h3>Summary/Overview</h3>
     <p>

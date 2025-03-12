@@ -1,146 +1,5 @@
 console.log("Its Alive");
 
-d3.json("data.json").then(data => {
-    // Set dimensions
-    const width = 800, height = 450, margin = { top: 40, right: 30, bottom: 50, left: 60 };
-
-    // Create scales
-    const xScale = d3.scaleLinear()
-        .domain([-0.5, 3.3])
-        .range([margin.left, width - margin.right]);
-
-    const yScale = d3.scaleLinear()
-        .domain([0, 1])
-        .range([height - margin.bottom, margin.top]);
-
-    const colorScale = d3.scaleOrdinal()
-        .domain(["als", "hunt", "control", "park"])
-        .range(["purple", "blue", "green", "red"]);
-
-    // Create SVG container
-    const svg = d3.select("#chart")
-        .attr("width", width + 150)
-        .attr("height", height);
-
-    // Add points
-    svg.selectAll("circle")
-        .data(data)
-        .enter().append("circle")
-        .attr("cx", d => xScale(d.jitter))
-        .attr("cy", d => yScale(d["Double Support Time"]))
-        .attr("r", 5)
-        .attr("fill", d => colorScale(d.label))
-        .attr("opacity", 0.7);
-
-    // Add x-axis
-    const xAxis = d3.axisBottom(xScale)
-        .tickValues([0, 1, 2, 3])
-        .tickFormat(d => ["Alzheimer's", "Huntington's", "Control", "Parkinson's"][d]);
-
-    svg.append("g")
-        .attr("transform", `translate(0,${height - margin.bottom})`)
-        .call(xAxis);
-
-    // Add y-axis
-    svg.append("g")
-        .attr("transform", `translate(${margin.left},0)`)
-        .call(d3.axisLeft(yScale).ticks(5));
-
-    // Add title
-    svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", margin.top / 2)
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text("Double Support Time per Group (Filtered: Values ≤ 1)");
-
-    // Add x-axis label
-    svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", height - margin.bottom / 2 + 20)
-        .attr("text-anchor", "middle")
-        .style("font-size", "12px")
-        .text("Group");
-
-    // Add y-axis label
-    svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -height / 2)
-        .attr("y", margin.left / 3)
-        .attr("text-anchor", "middle")
-        .style("font-size", "12px")
-        .text("Double Support Time (s)");
-
-    // Define legend position
-    const legendX = width; // Adjust as needed
-    const legendY = 20;
-
-    const legend = svg.append("g")
-        .attr("transform", `translate(${legendX}, ${legendY})`);
-
-    // Define categories
-    const categories = ["Alzheimer's Disease", "Huntington's Disease", "Control (Healthy)", "Parkinson's Disease"];
-
-    // Append legend items
-    categories.forEach((category, i) => {
-        let legendRow = legend.append("g")
-            .attr("transform", `translate(0, ${i * 20})`) // Adjust spacing
-            .style("pointer-events", "none");
-
-        // Legend color dot
-        legendRow.append("circle")
-            .attr("cx", 0)
-            .attr("cy", 0)
-            .attr("r", 6)
-            .attr("fill", colorScale(category));
-
-        // Legend text
-        legendRow.append("text")
-            .attr("x", 12)  // Position text beside the circle
-            .attr("y", 4)   // Align text vertically
-            .attr("text-anchor", "start")
-            .style("font-size", "12px")
-            .text(category);
-    });
-
-    const tooltip = d3.select("#tooltip");
-
-    const groupNames = {
-        "als": "Alzheimer's Disease",
-        "hunt": "Huntington's Disease",
-        "control": "Control (Healthy)",
-        "park": "Parkinson's Disease"
-    };
-
-    svg.selectAll("circle")
-        .on("mouseover", function(event, d) {
-            // Show tooltip
-            tooltip.style("display", "block")
-                .html(`<strong>Label:</strong> ${groupNames[d.label]} <br>
-                    <strong>Group:</strong> ${d.jitter.toFixed(3)} <br>
-                    <strong>Double Support Time:</strong> ${d["Double Support Time"].toFixed(3)}s`)
-                .style("left", (event.pageX + 10) + "px") // Offset tooltip
-                .style("top", (event.pageY - 20) + "px");
-
-            // Highlight point
-            d3.select(this).attr("r", 6).style("stroke", "black").style("stroke-width", 2);
-        })
-        .on("mousemove", function(event) {
-            // Move tooltip with mouse
-            tooltip.style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 20) + "px");
-        })
-        .on("mouseout", function() {
-            // Hide tooltip
-            tooltip.style("display", "none");
-
-            // Reset point style
-            d3.select(this).attr("r", 4).style("stroke", "none");
-        });
-
-})
-
-
 // **Gait-Animation Prototype**
 
 // Function to load and animate data
@@ -214,123 +73,190 @@ d3.select("#file-selector").on("change", function() {
 
 
 // ** main vis prototype **
-function animate_footprints(file, datasetIndex) {
-    d3.json(file).then(data => {
-        const margin = { top: 20, right: 20, bottom: 50, left: 70 };
-        const width = 600 - margin.left - margin.right;
-        const height = 350 - margin.top - margin.bottom;
-       
-        // Set up the SVG container
-        const svg = d3.select("#walking-path")
-                        .html("") // Clears previous content
-                        .attr("width", width + margin.left + margin.right)
-                        .attr("height", height + margin.top + margin.bottom)
-                        .append("g")
-                        .attr("transform", `translate(${margin.left},${margin.top})`);
-    
-        // Scale for the X and Y axes
-        const xScale = d3.scaleLinear().domain([0, 500]).range([0, width]);
-        const yScale = d3.scaleLinear().domain([0, 2]).range([height, 0]);
-    
-        // Create x and y axis
-        const xAxis = svg.append("g")
-            .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(xScale));
-    
-        const yAxis = svg.append("g")
-            .call(d3.axisLeft(yScale));
-    
-        // Add x-axis label
-        svg.append("text")
-            .attr("x", width / 2)
-            .attr("y", height + 40) // Adjusted for visibility
-            .style("text-anchor", "middle")
-            .text("Time (s)");
-    
-        // Add y-axis label
-        svg.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("x", -height / 2)
-            .attr("y", -40)
-            .style("text-anchor", "middle")
-            .text("Foot Position (m)");
 
-        // Get color for this dataset
-        const footColor = datasetColors[datasetIndex % datasetColors.length];
-        
-        // Create circles for each foot
-        const leftFoot = svg.append("circle")
-            .attr("class", "foot")
-            .attr("r", 5)
-            .attr("fill", footColor)
-            .attr("cx", xScale(data[0].x_left))
-            .attr("cy", yScale(data[0].y_left));
-    
-        const rightFoot = svg.append("circle")
-            .attr("class", "right-foot")
-            .attr("r", 5)
-            .attr("fill", footColor)
-            .attr("cx", xScale(data[0].x_right))
-            .attr("cy", yScale(data[0].y_right));
+let path1, path2;
+let data1, data2;
+let isAnimating = false;
+let index = 0; // Track the current index for animation
+let animationTimeout; // Track the animation timeout for interrupting
 
-        // Function to update foot positions over time
-        function updateFootPosition(index) {
-            if (index >= data.length) {
-                setTimeout(loadNextDataset, 1000);
-                return;
-            }
-    
-            // Get the time for the current data point
-            const currentTime = data[index].time;
-            console.log(currentTime)
-
-            // TEMP stop after 10 seconds
-            if (currentTime > 10) {
-                setTimeout(loadNextDataset, 1000);
-                return;
-            }
-    
-            // Update positions of the feet based on the current data point
-            leftFoot.transition()
-                .duration(currentTime / 100000)
-                .attr("cx", xScale(data[index].x_left))
-                .attr("cy", yScale(data[index].y_left));
-    
-            rightFoot.transition()
-                .duration(currentTime / 100000)
-                .attr("cx", xScale(data[index].x_right))
-                .attr("cy", yScale(data[index].y_right));
-    
-            // Call the next data point after a short delay
-            setTimeout(() => updateFootPosition(index + 1), currentTime / 100000); // divide by large number quicken speed
-        }
-    
-        // Start the animation
-        updateFootPosition(0);
-    
-    })
-}
-
-const datasets = [
-    "./gait_coordinates/control1_coord.json",
-    "./gait_coordinates/als1_coord.json",
-    "./gait_coordinates/park1_coord.json",
-    "./gait_coordinates/hunt1_coord.json"
-];
-
-const datasetColors = ["green", "purple", "red", "blue"];
-let currentDatasetIndex = 0; // Track which dataset is being played
-
-// Function to load the next dataset
-function loadNextDataset() {
-    currentDatasetIndex++;
-
-    if (currentDatasetIndex < datasets.length) {
-        animate_footprints(datasets[currentDatasetIndex], currentDatasetIndex);
-    } else {
-        console.log("All animations completed.");
+function loadFootprints(file1, file2) {
+    // Stop ongoing animation and reset index immediately
+    if (isAnimating) {
+        isAnimating = false;
+        clearTimeout(animationTimeout); // Clear any ongoing animation timeout
     }
+    index = 0; // Reset the animation index
+
+    // Clear any ongoing transitions and reset positions
+    if (path1 && path2) {
+        path1.leftFoot.transition().duration(0).attr("cx", path1.xScale(data1[0].x_left)).attr("cy", path1.yScale(data1[0].y_left));
+        path1.rightFoot.transition().duration(0).attr("cx", path1.xScale(data1[0].x_right)).attr("cy", path1.yScale(data1[0].y_right));
+        path2.leftFoot.transition().duration(0).attr("cx", path2.xScale(data2[0].x_left)).attr("cy", path2.yScale(data2[0].y_left));
+        path2.rightFoot.transition().duration(0).attr("cx", path2.xScale(data2[0].x_right)).attr("cy", path2.yScale(data2[0].y_right));
+    }
+
+    Promise.all([d3.json(file1), d3.json(file2)]).then(([d1, d2]) => {
+        data1 = d1.filter(d => d.time <= 20);
+        data2 = d2.filter(d => d.time <= 20);
+
+        // Create the walking path visuals without animation
+        path1 = createWalkingPath("#walking-path1", data1, "blue", "green");
+        path2 = createWalkingPath("#walking-path2", data2, "blue", "green");
+
+        // Reset the animation state to ensure it doesn't play automatically after dropdown change
+        isAnimating = false;
+    });
 }
 
-// Start with the first dataset
-animate_footprints(datasets[currentDatasetIndex], currentDatasetIndex);
+function createWalkingPath(containerId, data, footColorLeft, footColorRight) {
+    const margin = { top: 20, right: 20, bottom: 50, left: 70 };
+    const width = 400 - margin.left - margin.right;
+    const height = 300 - margin.top - margin.bottom;
+
+    const xScale = d3.scaleLinear().domain([0, 20]).range([0, width]);
+    const yScale = d3.scaleLinear().domain([0, 1]).range([height, 0]);
+
+    const svg = d3.select(containerId)
+        .html("")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Create x and y axes
+    svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(xScale));
+    svg.append("g").call(d3.axisLeft(yScale));
+
+    // Add x-axis label
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height + 40)
+        .style("text-anchor", "middle")
+        .text("Distance in 20 seconds");
+
+    // Add y-axis label
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", -40)
+        .style("text-anchor", "middle")
+        .text("Foot Position (m)");
+
+    // Left and Right foot markers
+    const leftFoot = svg.append("circle")
+        .attr("r", 5)
+        .attr("fill", footColorLeft)
+        .attr("cx", xScale(data[0].x_left))
+        .attr("cy", yScale(data[0].y_left));
+
+    const rightFoot = svg.append("circle")
+        .attr("r", 5)
+        .attr("fill", footColorRight)
+        .attr("cx", xScale(data[0].x_right))
+        .attr("cy", yScale(data[0].y_right));
+
+    // Add a legend to the right of the graph
+    const legend = svg.append("g")
+        .attr("transform", `translate(${width - 60}, 20)`); // Position the legend
+
+    // Green box (Left Foot) in the legend
+    legend.append("rect")
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("fill", footColorLeft);
+
+    legend.append("text")
+        .attr("x", 15)
+        .attr("y", 10)
+        .attr("fill", "black")
+        .text("Left Foot")
+        .style("font-size", "12px");
+
+    // Blue box (Right Foot) in the legend
+    legend.append("rect")
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("y", 15)  // Place it below the green box
+        .attr("fill", footColorRight);
+
+    legend.append("text")
+        .attr("x", 15)
+        .attr("y", 25)
+        .attr("fill", "black")
+        .text("Right Foot")
+        .style("font-size", "12px");
+
+    return { leftFoot, rightFoot, data, xScale, yScale };
+}
+
+function startAnimation() {
+    if (isAnimating) return; // Prevent starting the animation if it's already running
+
+    if (!data1 || !data2) return;
+
+    isAnimating = true;
+
+    let index = 0;
+    function updateFootPositions() {
+        if (index >= Math.min(data1.length, data2.length)) {
+            isAnimating = false;  // Animation has finished, set flag to false
+            return;
+        }
+
+        const currentTime1 = data1[index].time;
+        const currentTime2 = data2[index].time;
+
+        // console.log(`time1: ${currentTime1}`);
+        // console.log(`time2: ${currentTime2}`);
+
+        // Update positions for first dataset
+        path1.leftFoot.transition()
+            .duration(currentTime1)
+            .attr("cx", path1.xScale(data1[index].x_left))
+            .attr("cy", path1.yScale(data1[index].y_left));
+        path1.rightFoot.transition()
+            .duration(currentTime1)
+            .attr("cx", path1.xScale(data1[index].x_right))
+            .attr("cy", path1.yScale(data1[index].y_right));
+
+        // Update positions for second dataset
+        path2.leftFoot.transition()
+            .duration(currentTime2)
+            .attr("cx", path2.xScale(data2[index].x_left))
+            .attr("cy", path2.yScale(data2[index].y_left));
+        path2.rightFoot.transition()
+            .duration(currentTime2)
+            .attr("cx", path2.xScale(data2[index].x_right))
+            .attr("cy", path2.yScale(data2[index].y_right));
+
+        index++;
+        animationTimeout = setTimeout(updateFootPositions, 1);
+    }
+
+    updateFootPositions();
+}
+
+// Load default data on page load (no animation)
+loadFootprints("./gait_coordinates/control1_coord.json", "./gait_coordinates/als1_coord.json");
+
+// Set dropdown values to match loaded files
+document.getElementById('file1').value = './gait_coordinates/control1_coord.json';
+document.getElementById('file2').value = './gait_coordinates/als1_coord.json';
+
+// Update graphs (but no animation) when dropdown changes
+document.getElementById('file1').addEventListener('change', () => {
+    const file1 = document.getElementById('file1').value;
+    const file2 = document.getElementById('file2').value;
+    loadFootprints(file1, file2);  // Reload without animation
+});
+
+document.getElementById('file2').addEventListener('change', () => {
+    const file1 = document.getElementById('file1').value;
+    const file2 = document.getElementById('file2').value;
+    loadFootprints(file1, file2);  // Reload without animation
+});
+
+window.startAnimation = startAnimation;
