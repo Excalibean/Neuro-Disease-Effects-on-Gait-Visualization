@@ -71,7 +71,6 @@ d3.select("#file-selector").on("change", function() {
     loadAndAnimateData(selectedFile);
 });
 
-
 // ** main vis prototype **
 
 let path1, path2;
@@ -209,9 +208,6 @@ function startAnimation() {
         const currentTime1 = data1[index].time;
         const currentTime2 = data2[index].time;
 
-        // console.log(`time1: ${currentTime1}`);
-        // console.log(`time2: ${currentTime2}`);
-
         // Update positions for first dataset
         path1.leftFoot.transition()
             .duration(currentTime1)
@@ -260,3 +256,172 @@ document.getElementById('file2').addEventListener('change', () => {
 });
 
 window.startAnimation = startAnimation;
+
+// Function to animate a single walking path without displaying y-axis
+function animateWalkingPaths(files, svgIds, yOffset = 0, labelTexts = []) {
+    Promise.all(files.map(file => d3.json(file))).then(datasets => {
+        datasets.forEach((data, index) => {
+            const svgId = svgIds[index];
+            const labelText = labelTexts[index];
+
+            const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+            const width = 600 - margin.left - margin.right;
+            const height = 100 - margin.top - margin.bottom;
+
+            // Set up the SVG container
+            const svg = d3.select(svgId)
+                .html("") // Clear previous content
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top + yOffset})`);
+
+            // Scale for the X and Y axes
+            const xScale = d3.scaleLinear().domain([0, 200]).range([0, width]);
+            const yScale = d3.scaleLinear().domain([0, 2]).range([height, 0]);
+
+            // Create x-axis
+            const xAxis = svg.append("g")
+                .attr("transform", `translate(0, ${height})`)
+                .call(d3.axisBottom(xScale));
+
+            // Add x-axis label
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", height + 20) // Adjusted for visibility
+                .style("text-anchor", "middle")
+                .text("Time (s)");
+
+            // Add label text
+            svg.append("text")
+                .attr("x", width * 0.95)
+                .attr("y", height / 2)
+                .attr("text-anchor", "end")
+                .attr("alignment-baseline", "middle")
+                .text(labelText);
+
+            // Get color for this dataset
+            const footColor = "blue"; // Set a fixed color for the single path
+
+            // Create circles for each foot
+            const leftFoot = svg.append("circle")
+                .attr("class", "foot")
+                .attr("r", 5)
+                .attr("fill", footColor)
+                .attr("cx", xScale(data[0].x_left))
+                .attr("cy", yScale(data[0].y_left)); // Use yScale for vertical positioning
+
+            const rightFoot = svg.append("circle")
+                .attr("class", "right-foot")
+                .attr("r", 5)
+                .attr("fill", footColor)
+                .attr("cx", xScale(data[0].x_right))
+                .attr("cy", yScale(data[0].y_right)); // Use yScale for vertical positioning
+
+            // Function to update foot positions over time
+            function updateFootPosition(index) {
+                if (index >= data.length) {
+                    return;
+                }
+
+                // Get the time for the current data point
+                const currentTime = data[index].time;
+
+                // TEMP stop after 200 seconds
+                if (currentTime > 200) {
+                    return;
+                }
+
+                // Update positions of the feet based on the current data point
+                leftFoot.transition()
+                    .duration(currentTime / 100000)
+                    .attr("cx", xScale(data[index].x_left))
+                    .attr("cy", yScale(data[index].y_left)); // Update y position
+
+                rightFoot.transition()
+                    .duration(currentTime / 100000)
+                    .attr("cx", xScale(data[index].x_right))
+                    .attr("cy", yScale(data[index].y_right)); // Update y position
+
+                // Call the next data point after a short delay
+                setTimeout(() => updateFootPosition(index + 1), currentTime / 100000); // divide by large number quicken speed
+            }
+
+            // Start the animation
+            updateFootPosition(0);
+        });
+    });
+}
+
+// Initial load
+animateWalkingPaths(
+    ["./gait_coordinates/control1_coord.json"],
+    ["#combined-walking-path"],
+    0,
+    ["Healthy Person"]
+);
+
+let step = 0;
+const descriptions = [
+    "This is the Gait of a healthy person",
+    "Gait refers to the manner or pattern of walking.",
+    "This is the Gait of a person with Parkinson's Disease",
+    "This is the Gait of a person with Huntington's Disease",
+    "This is the Gait of a person with Alzheimer's Disease"
+];
+const files = [
+    "./gait_coordinates/control1_coord.json",
+    "./gait_coordinates/park1_coord.json",
+    "./gait_coordinates/hunt1_coord.json",
+    "./gait_coordinates/als1_coord.json"
+];
+const svgIds = [
+    "#combined-walking-path",
+    "#second-walking-path",
+    "#third-walking-path",
+    "#fourth-walking-path"
+];
+const labelTexts = [
+    "Healthy Person",
+    "Parkinson's Disease",
+    "Huntington's Disease",
+    "Alzheimer's Disease"
+];
+
+d3.select("#visualization-container").on("click", function() {
+    step++;
+    if (step < descriptions.length) {
+        d3.select("#description").text(descriptions[step]);
+        if (step === 1) {
+            d3.select("#description-container")
+                .transition()
+                .duration(1000)
+                .style("top", "10px")
+                .style("right", "10px")
+                .style("transform", "translate(0, 0)")
+                .on("end", function() {
+                    d3.select("#combined-walking-path")
+                        .transition()
+                        .delay(500) // Add delay to ensure smooth transition
+                        .duration(1000)
+                        .style("opacity", 1);
+                    animateWalkingPaths(files.slice(0, 1), svgIds.slice(0, 1), 0, labelTexts.slice(0, 1));
+                });
+        } else if (step === 2) {
+            d3.select("#combined-walking-path").style("transform", "translateY(-50px)");
+            d3.select("#second-walking-path").style("opacity", 1);
+            animateWalkingPaths(files.slice(0, 2), svgIds.slice(0, 2), 0, labelTexts.slice(0, 2));
+        } else if (step === 3) {
+            d3.select("#combined-walking-path").style("transform", "translateY(-150px)");
+            d3.select("#second-walking-path").style("transform", "translateY(-100px)");
+            d3.select("#third-walking-path").style("opacity", 1);
+            animateWalkingPaths(files.slice(0, 3), svgIds.slice(0, 3), 0, labelTexts.slice(0, 3));
+        } else if (step === 4) {
+            d3.select("#combined-walking-path").style("transform", "translateY(-250px)");
+            d3.select("#second-walking-path").style("transform", "translateY(-200px)");
+            d3.select("#third-walking-path").style("transform", "translateY(-100px)");
+            d3.select("#fourth-walking-path").style("opacity", 1);
+            animateWalkingPaths(files, svgIds, 0, labelTexts);
+        }
+    } else {
+        d3.select("#visualization-container").style("pointer-events", "none");
+    }
+});

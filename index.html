@@ -10,7 +10,19 @@
 </head>
 <body>
     <h1>Final Project Prototype</h1>
+    
+    <div id="description-container">
+        <p id="description">This is the Gait of a healthy person</p>
+    </div>
+    
+    <div id="visualization-container">
+        <svg id="combined-walking-path"></svg>
+        <svg id="second-walking-path" style="opacity: 0;"></svg>
+        <svg id="third-walking-path" style="opacity: 0;"></svg>
+        <svg id="fourth-walking-path" style="opacity: 0;"></svg>
+    </div>
 
+    <div id="tooltip"></div>
     <div id="gait-animation-container">
         <select id="file-selector">
             <option value="control1.json">Control (Healthy)</option>
@@ -27,28 +39,28 @@
     <div>
         <label for="file1">Select Disease 1:</label>
         <select id="file1">
-            <option value="./gait_coordinates/control1_coord.json">Control</option>
-            <option value="./gait_coordinates/als1_coord.json">ALS</option>
-            <option value="./gait_coordinates/park1_coord.json">Parkinson's</option>
-            <option value="./gait_coordinates/hunt1_coord.json">Huntington's</option>
+            <option value="./gait_coordinates/control1_coord.json">Control (Healthy)</option>
+            <option value="./gait_coordinates/park1_coord.json">Parkinson's Disease</option>
+            <option value="./gait_coordinates/als1_coord.json">Alzheimer's Disease</option>
+            <option value="./gait_coordinates/hunt1_coord.json">Huntington's Disease</option>
         </select>
-    
+
         <label for="file2">Select Disease 2:</label>
         <select id="file2">
-            <option value="./gait_coordinates/control1_coord.json">Control</option>
-            <option value="./gait_coordinates/als1_coord.json">ALS</option>
-            <option value="./gait_coordinates/park1_coord.json">Parkinson's</option>
-            <option value="./gait_coordinates/hunt1_coord.json">Huntington's</option>
+            <option value="./gait_coordinates/control1_coord.json">Control (Healthy)</option>
+            <option value="./gait_coordinates/park1_coord.json">Parkinson's Disease</option>
+            <option value="./gait_coordinates/als1_coord.json">Alzheimer's Disease</option>
+            <option value="./gait_coordinates/hunt1_coord.json">Huntington's Disease</option>
         </select>
     
         <button onclick="startAnimation()">Animate</button>
     </div>
-
     <div id="walking-path-container">
         <svg id="walking-path1"></svg>
         <svg id="walking-path2"></svg>
-    </div> 
-    
+    </div>
+
+
     <h3>Summary/Overview</h3>
     <p>
         We have decided to remain the same group for the final project after Project 3. Since we have already developed numerous ideas regarding the previous dataset, KoreanDB, we wanted to explore something new and more challenging. This led us to research various topics within a larger resource called PhysioNet. We were particularly drawn to this dataset because, at first glance, it presented many opportunities to develop new visualization skills.
