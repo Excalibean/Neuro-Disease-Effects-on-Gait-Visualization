@@ -187,17 +187,29 @@ label {
     fill: #0072B2; /* Blue */
 }
 
-.foot.parkinsons {
+.foot.parkinsons,
+.foot.parkinsons-early,
+.foot.parkinsons-mid,
+.foot.parkinsons-advanced {
     fill: #E69F00; /* Orange */
 }
 
-.foot.huntingtons {
+/* Huntington's styles */
+.foot.huntingtons,
+.foot.huntingtons-early,
+.foot.huntingtons-mid,
+.foot.huntingtons-advanced {
     fill: #56B4E9; /* Sky Blue */
 }
 
-.foot.alzheimers {
+/* Alzheimer's styles */
+.foot.alzheimers,
+.foot.alzheimers-early,
+.foot.alzheimers-mid,
+.foot.alzheimers-advanced {
     fill: #D55E00; /* Vermilion */
 }
+
 #walking-path-comparison-container {
     border: 2px solid black;
     padding: 10px;

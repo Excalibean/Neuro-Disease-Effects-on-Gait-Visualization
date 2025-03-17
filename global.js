@@ -337,14 +337,47 @@ function animateWalkingPaths(files, svgIds, yOffset = 0, labelTexts = []) {
 
             // Determine the class for the dots based on the label text
             let footClass = "";
-            if (labelText === "Healthy Person") {
+            if (labelText === "Healthy Person" || 
+                labelText === "Healthy Person - Slow Pace" || 
+                labelText === "Healthy Person - Normal Pace" || 
+                labelText === "Healthy Person - Fast Pace") {
                 footClass = "healthy";
-            } else if (labelText === "Parkinson's Disease") {
+            } 
+            else if (labelText === "Parkinson's Disease") {
                 footClass = "parkinsons";
-            } else if (labelText === "Huntington's Disease") {
+            }
+            else if (labelText === "Parkinson's - Early Stage") {
+                footClass = "parkinsons-early";
+            }
+            else if (labelText === "Parkinson's - Mid Stage") {
+                footClass = "parkinsons-mid";
+            }
+            else if (labelText === "Parkinson's - Advanced Stage") {
+                footClass = "parkinsons-advanced";
+            }
+            else if (labelText === "Huntington's Disease") {
                 footClass = "huntingtons";
-            } else if (labelText === "Alzheimer's Disease") {
+            }
+            else if (labelText === "Huntington's - Early Stage") {
+                footClass = "huntingtons-early";
+            }
+            else if (labelText === "Huntington's - Mid Stage") {
+                footClass = "huntingtons-mid";
+            }
+            else if (labelText === "Huntington's - Advanced Stage") {
+                footClass = "huntingtons-advanced";
+            }
+            else if (labelText === "Alzheimer's Disease") {
                 footClass = "alzheimers";
+            }
+            else if (labelText === "Alzheimer's - Early Stage") {
+                footClass = "alzheimers-early";
+            }
+            else if (labelText === "Alzheimer's - Mid Stage") {
+                footClass = "alzheimers-mid";
+            }
+            else if (labelText === "Alzheimer's - Advanced Stage") {
+                footClass = "alzheimers-advanced";
             }
 
             // Create circles for each foot
@@ -409,25 +442,52 @@ const descriptions = [
     "This is the pace of a Healthy Person.",
     "This is the pace of a person with Parkinson's Disease. \nA neurological disorder that affects movement.\nIt is typically characterized by tremors, stiffness, slowness and impaired balance.",
     "Other neurological disorders such as Huntington's Disease also affect Gait due to uncontrollable movement and loss of motor control.",
-    "Changes in Gait take many variations whether it's simply walking slower, lack of an arm swing on a single side, shuffling, a forward lean causing quicker steps, and more."
+    "Changes in Gait take many variations whether it's simply walking slower, lack of an arm swing on a single side, shuffling, a forward lean causing quicker steps, and more.",
+    "Parkingson's in particular has a gait named after it.\n Parkingsonian Gait is characterized by slow, little, shuffling steps with the body bent forward."
 ];
+
 const files = [
     "./gait_coordinates/control1_coord.json",
-    "./gait_coordinates/park1_coord.json",
+    "./gait_coordinates/park1_high.json",
     "./gait_coordinates/hunt1_coord.json",
-    "./gait_coordinates/als1_coord.json"
+    "./gait_coordinates/als1_coord.json",
+    "./gait_coordinates/park2_low.json",
+    "./gait_coordinates/park11_mid.json",
+    "./gait_coordinates/als1_low.json",
+    "./gait_coordinates/als3_mid.json",
+    "./gait_coordinates/als9_high.json",
+    "./gait_coordinates/control14_low.json",
+    "./gait_coordinates/control9_mid.json", 
+    "./gait_coordinates/control12_high.json",
+    "./gait_coordinates/hunt9_low.json",
+    "./gait_coordinates/hunt1_mid.json",
+    "./gait_coordinates/hunt19_high.json"
 ];
+
 const svgIds = [
     "#combined-walking-path",
     "#second-walking-path",
     "#third-walking-path",
     "#fourth-walking-path"
 ];
+
 const labelTexts = [
     "Healthy Person",
     "Parkinson's Disease",
     "Huntington's Disease",
-    "Alzheimer's Disease"
+    "Alzheimer's Disease",
+    "Parkinson's - Early Stage",
+    "Parkinson's - Mid Stage",
+    "Parkinson's - Advanced Stage",
+    "Alzheimer's - Early Stage",
+    "Alzheimer's - Mid Stage",
+    "Alzheimer's - Advanced Stage",
+    "Healthy Person - Slow Pace",
+    "Healthy Person - Normal Pace",
+    "Healthy Person - Fast Pace",
+    "Huntington's - Early Stage",
+    "Huntington's - Mid Stage",
+    "Huntington's - Advanced Stage"
 ];
 
 d3.select("#visualization-container").on("click", function() {
@@ -464,12 +524,38 @@ d3.select("#visualization-container").on("click", function() {
         d3.select("#second-walking-path").style("transform", "translateY(-200px)");
         d3.select("#third-walking-path").style("transform", "translateY(-100px)");
         d3.select("#fourth-walking-path").style("opacity", 1);
-        animateWalkingPaths(files, svgIds, 0, labelTexts);
-
-        // scroll down prompt
+        // Just use the first 4 files that match with your 4 SVG IDs
+        animateWalkingPaths(files.slice(0, 4), svgIds, 0, labelTexts.slice(0, 4));
+    } else if (step === 6) {
+        // Update the description to talk about Huntington's disease
+        d3.select("#description").text(descriptions[5]);
+        
+        // Hide the healthy person graph
+        d3.select("#combined-walking-path").style("opacity", 0);
+        
+        // Reset transformations and set proper vertical spacing between graphs
+        d3.select("#second-walking-path") // Parkingon's low
+            .style("transform", "translateY(-300px)")
+            .style("opacity", 1);
+        
+        d3.select("#third-walking-path") // Parkingsons's mid stage
+            .style("transform", "translateY(-200px)") // Use positive value to move DOWN
+            .style("opacity", 1);
+        
+        d3.select("#fourth-walking-path") // Parkingson's advanced stage
+            .style("transform", "translateY(-100px)") // Use positive value to move DOWN
+            .style("opacity", 1);
+        
+        // Use the Huntington's disease files
+        const parkFiles = [files[4], files[5], files[1]]; // low, mid, and advanced stages
+        const parkLabels = [labelTexts[4], labelTexts[5], labelTexts[6]]; // Labels for these stages
+        
+        // Animate the three Huntington's cases with their updated positions
+        animateWalkingPaths([parkFiles[0]], ["#second-walking-path"], 0, [parkLabels[0]]);
+        animateWalkingPaths([parkFiles[1]], ["#third-walking-path"], 0, [parkLabels[1]]);
+        animateWalkingPaths([parkFiles[2]], ["#fourth-walking-path"], 0, [parkLabels[2]]);
+        
         d3.select("#scroll-prompt")
-            .transition()
-            .duration(1000)
             .style("opacity", 1);
     } else {
         d3.select("#visualization-container").style("pointer-events", "none");
