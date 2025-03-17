@@ -71,7 +71,7 @@ d3.select("#file-selector").on("change", function() {
     loadAndAnimateData(selectedFile);
 });
 
-// ** side vis prototype **
+// ** walking path proto **
 
 let path1, path2;
 let data1, data2;
