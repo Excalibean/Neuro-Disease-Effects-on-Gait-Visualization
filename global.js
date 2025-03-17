@@ -306,15 +306,17 @@ function animateWalkingPaths(files, svgIds, yOffset = 0, labelTexts = []) {
             const svgId = svgIds[index];
             const labelText = labelTexts[index];
 
-            const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+            const margin = { top: 100, right: 20, bottom: 20, left: 20 }; // Adjust margins as needed
             const width = 600 - margin.left - margin.right;
-            const height = 100 - margin.top - margin.bottom;
+            const height = 150 - margin.top - margin.bottom; // Increase height to ensure graphs stay within view
 
             // Set up the SVG container
             const svg = d3.select(svgId)
                 .html("") // Clear previous content
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", `translate(${margin.left},${margin.top + yOffset})`);
+                .attr("transform", `translate(${margin.left},${margin.top + yOffset})`); // Adjust yOffset to shift down
 
             // Scale for the X and Y axes
             const xScale = d3.scaleLinear().domain([0, 200]).range([0, width]);
@@ -325,7 +327,6 @@ function animateWalkingPaths(files, svgIds, yOffset = 0, labelTexts = []) {
                 .attr("transform", `translate(0, ${height})`)
                 .call(d3.axisBottom(xScale));
 
-
             // Add label text
             svg.append("text")
                 .attr("x", width * 0.95)
@@ -334,21 +335,28 @@ function animateWalkingPaths(files, svgIds, yOffset = 0, labelTexts = []) {
                 .attr("alignment-baseline", "middle")
                 .text(labelText);
 
-            // Get color for this dataset
-            const footColor = "blue"; // Set a fixed color for the single path
+            // Determine the class for the dots based on the label text
+            let footClass = "";
+            if (labelText === "Healthy Person") {
+                footClass = "healthy";
+            } else if (labelText === "Parkinson's Disease") {
+                footClass = "parkinsons";
+            } else if (labelText === "Huntington's Disease") {
+                footClass = "huntingtons";
+            } else if (labelText === "Alzheimer's Disease") {
+                footClass = "alzheimers";
+            }
 
             // Create circles for each foot
             const leftFoot = svg.append("circle")
-                .attr("class", "foot")
+                .attr("class", `foot ${footClass}`)
                 .attr("r", 5)
-                .attr("fill", footColor)
                 .attr("cx", xScale(data[0].x_left))
                 .attr("cy", yScale(data[0].y_left)); // Use yScale for vertical positioning
 
             const rightFoot = svg.append("circle")
-                .attr("class", "right-foot")
+                .attr("class", `foot ${footClass}`)
                 .attr("r", 5)
-                .attr("fill", footColor)
                 .attr("cx", xScale(data[0].x_right))
                 .attr("cy", yScale(data[0].y_right)); // Use yScale for vertical positioning
 
@@ -362,7 +370,7 @@ function animateWalkingPaths(files, svgIds, yOffset = 0, labelTexts = []) {
                 const currentTime = data[index].time;
 
                 // TEMP stop after 200 seconds
-                if (currentTime > 200) {
+                if (currentTime > 235) {
                     return;
                 }
 
@@ -436,23 +444,23 @@ d3.select("#visualization-container").on("click", function() {
     } else if (step === 3) {
         d3.select("#description").text(descriptions[2]);
         d3.select("#description-container")
-                .transition()
-                .duration(300)
-                .style("top", "80px")
-                .style("right", "80px")
-                .style("transform", "translate(0, 0)");
-        d3.select("#combined-walking-path").style("transform", "translateY(-150px)");
+            .transition()
+            .duration(300)
+            .style("top", "120px")
+            .style("right", "80px")
+            .style("transform", "translate(0, 0)");
+        d3.select("#combined-walking-path").style("transform", "translateY(-125px)");
         d3.select("#second-walking-path").style("opacity", 1);
         animateWalkingPaths(files.slice(0, 2), svgIds.slice(0, 2), 0, labelTexts.slice(0, 2));
     } else if (step === 4) {
         d3.select("#description").text(descriptions[3]);
-        d3.select("#combined-walking-path").style("transform", "translateY(-250px)");
+        d3.select("#combined-walking-path").style("transform", "translateY(-225px)");
         d3.select("#second-walking-path").style("transform", "translateY(-100px)");
         d3.select("#third-walking-path").style("opacity", 1);
         animateWalkingPaths(files.slice(0, 3), svgIds.slice(0, 3), 0, labelTexts.slice(0, 3));
     } else if (step === 5) {
         d3.select("#description").text(descriptions[4]);
-        d3.select("#combined-walking-path").style("transform", "translateY(-350px)");
+        d3.select("#combined-walking-path").style("transform", "translateY(-325px)");
         d3.select("#second-walking-path").style("transform", "translateY(-200px)");
         d3.select("#third-walking-path").style("transform", "translateY(-100px)");
         d3.select("#fourth-walking-path").style("opacity", 1);
