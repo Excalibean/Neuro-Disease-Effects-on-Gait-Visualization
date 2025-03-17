@@ -175,3 +175,109 @@ label {
 #scroll-prompt .right-arrow {
     transform: rotate(90deg); /* Rotate to point downwards */
 }
+
+#walking-path-comparison-container {
+    border: 2px solid black;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 900px;
+    margin: 20px auto;
+}
+
+#walking-path-comparison-container h2 {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+#walking-path-comparison-container select {
+    padding: 5px;
+    width: 200px;
+    margin: 10px;
+}
+#walking-path-comparison-container button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#walking-path-comparison-container button:hover {
+    background-color: #45a049;
+}
+#walking-path-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+#walking-path-container .graph-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 45%;
+    margin-bottom: 20px;
+}
+#walking-path-container svg {
+    width: 100%;
+    height: 300px; 
+    max-width: 100%; 
+    display: block;
+    margin: auto;
+    border: 1px solid black;
+}
+#walking-path-container .graph-label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+#duration-slider-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+#duration-slider {
+    width: 80%; /* Make the slider take more space */
+}
+#duration-label {
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+#narrative-container {
+    text-align: center;
+    margin-top: 20px;
+    padding: 5px;
+    border-radius: 5px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#narrative-text {
+    font-size: 18px;
+    color: black;
+    line-height: 1.6;
+}
+/* Media queries for responsiveness */
+@media (max-width: 940px) {
+    #walking-path-container {
+        flex-direction: column; 
+    }
+    #walking-path-container .graph-wrapper {
+        width: 100%; 
+    }
+    #walking-path-container svg {
+        height: 300px; 
+        max-width: 100%; 
+    }
+}

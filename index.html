@@ -10,7 +10,8 @@
 </head>
 <body>
     <h1>Neurological Diseases and Their Effects on Gait: The Hidden Language of Moving</h1>
-    
+    <!-- Discover the hidden language of movement: How neurological diseases like Parkinson's, Huntington's, and ALS transform our gait. -->
+
     <div id="description-container">
         <p id="description">What is a Gait?</p>
     </div>
@@ -39,32 +40,48 @@
         <div id="gait-animation-title">Walking Data Animation Prototype</div>
     </div>
 
-    <h2>Walking Path Comparison</h2>
+    <div id="narrative-container">
+        <p id="narrative-text">Use the controls below to compare the walking paths of different diseases.</p>
+    </div>
 
-    <div>
-        <label for="file1">Select Disease 1:</label>
-        <select id="file1">
-            <option value="./gait_coordinates/control1_coord.json">Control (Healthy)</option>
-            <option value="./gait_coordinates/park1_coord.json">Parkinson's Disease</option>
-            <option value="./gait_coordinates/als1_coord.json">Alzheimer's Disease</option>
-            <option value="./gait_coordinates/hunt1_coord.json">Huntington's Disease</option>
-        </select>
-
-        <label for="file2">Select Disease 2:</label>
-        <select id="file2">
-            <option value="./gait_coordinates/control1_coord.json">Control (Healthy)</option>
-            <option value="./gait_coordinates/park1_coord.json">Parkinson's Disease</option>
-            <option value="./gait_coordinates/als1_coord.json">Alzheimer's Disease</option>
-            <option value="./gait_coordinates/hunt1_coord.json">Huntington's Disease</option>
-        </select>
+    <div id="walking-path-comparison-container">
+        <h2>Walking Path Comparison</h2>
+        <div>
+            <label for="file1">Select Disease 1:</label>
+            <select id="file1">
+                <option value="./gait_coordinates/control1_coord.json">Control (Healthy)</option>
+                <option value="./gait_coordinates/park1_coord.json">Parkinson's Disease</option>
+                <option value="./gait_coordinates/als1_coord.json">Huntington's Disease</option>
+                <option value="./gait_coordinates/hunt1_coord.json">ALS Disease</option>
+            </select>
     
-        <button onclick="startAnimation()">Animate</button>
-    </div>
-    <div id="walking-path-container">
-        <svg id="walking-path1"></svg>
-        <svg id="walking-path2"></svg>
-    </div>
+            <label for="file2">Select Disease 2:</label>
+            <select id="file2">
+                <option value="./gait_coordinates/control1_coord.json">Control (Healthy)</option>
+                <option value="./gait_coordinates/park1_coord.json">Parkinson's Disease</option>
+                <option value="./gait_coordinates/als1_coord.json">Huntington's Disease</option>
+                <option value="./gait_coordinates/hunt1_coord.json">ALS Disease</option>
+            </select>
 
+            <div>
+                <label for="duration-slider">Walking Duration:</label>
+                <input type="range" id="duration-slider" min="5" max="500" value="100" step="5" oninput="updateDurationLabel(this.value)">
+                <span id="duration-label">100</span> seconds
+            </div>
+        
+            <button onclick="startAnimation()">Animate</button>
+        </div>
+        <div id="walking-path-container">
+            <div class="graph-wrapper">
+                <div class="graph-label" id="label-disease1">Disease 1</div>
+                <svg id="walking-path1"></svg>
+            </div>
+            <div class="graph-wrapper">
+                <div class="graph-label" id="label-disease2">Disease 2</div>
+                <svg id="walking-path2"></svg>
+            </div>
+        </div>
+    </div>
 
     <h3>Summary/Overview</h3>
     <p>

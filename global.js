@@ -71,7 +71,7 @@ d3.select("#file-selector").on("change", function() {
     loadAndAnimateData(selectedFile);
 });
 
-// ** main vis prototype **
+// ** side vis prototype **
 
 let path1, path2;
 let data1, data2;
@@ -79,7 +79,30 @@ let isAnimating = false;
 let index = 0; // Track the current index for animation
 let animationTimeout; // Track the animation timeout for interrupting
 
+// debounce function to limit the rate of execution of a function
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
+document.getElementById('duration-slider').addEventListener('input', debounce(() => {
+    const file1 = document.getElementById('file1').value;
+    const file2 = document.getElementById('file2').value;
+    loadFootprints(file1, file2);  // Reload without animation
+    updateDurationLabel(document.getElementById('duration-slider').value);
+}, 250));
+
+function updateDurationLabel(value) {
+    document.getElementById('duration-label').textContent = value;
+}
+window.updateDurationLabel = updateDurationLabel;
+
 function loadFootprints(file1, file2) {
+    const duration = document.getElementById('duration-slider').value;
+
     // Stop ongoing animation and reset index immediately
     if (isAnimating) {
         isAnimating = false;
@@ -96,25 +119,25 @@ function loadFootprints(file1, file2) {
     }
 
     Promise.all([d3.json(file1), d3.json(file2)]).then(([d1, d2]) => {
-        data1 = d1.filter(d => d.time <= 20);
-        data2 = d2.filter(d => d.time <= 20);
+        data1 = d1.filter(d => d.time <= duration);
+        data2 = d2.filter(d => d.time <= duration);
 
         // Create the walking path visuals without animation
-        path1 = createWalkingPath("#walking-path1", data1, "blue", "green");
-        path2 = createWalkingPath("#walking-path2", data2, "blue", "green");
+        path1 = createWalkingPath("#walking-path1", data1, "blue", "green", duration);
+        path2 = createWalkingPath("#walking-path2", data2, "blue", "green", duration);
 
         // Reset the animation state to ensure it doesn't play automatically after dropdown change
         isAnimating = false;
     });
 }
 
-function createWalkingPath(containerId, data, footColorLeft, footColorRight) {
+function createWalkingPath(containerId, data, footColorLeft, footColorRight, duration) {
     const margin = { top: 20, right: 20, bottom: 50, left: 70 };
     const width = 400 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
 
-    const xScale = d3.scaleLinear().domain([0, 20]).range([0, width]);
-    const yScale = d3.scaleLinear().domain([0, 1]).range([height, 0]);
+    const xScale = d3.scaleLinear().domain([0, duration]).range([0, width]);
+    const yScale = d3.scaleLinear().domain([0, 0.5]).range([height, 0]);
 
     const svg = d3.select(containerId)
         .html("")
@@ -134,7 +157,7 @@ function createWalkingPath(containerId, data, footColorLeft, footColorRight) {
         .attr("x", width / 2)
         .attr("y", height + 40)
         .style("text-anchor", "middle")
-        .text("Distance in 20 seconds");
+        .text(`Distance in ${duration} Seconds`);
 
     // Add y-axis label
     svg.append("text")
@@ -235,25 +258,44 @@ function startAnimation() {
     updateFootPositions();
 }
 
-// Load default data on page load (no animation)
-loadFootprints("./gait_coordinates/control1_coord.json", "./gait_coordinates/als1_coord.json");
+// Function to update the narrative text
+function updateNarrativeText(text) {
+    document.getElementById('narrative-text').textContent = text;
+}
 
-// Set dropdown values to match loaded files
-document.getElementById('file1').value = './gait_coordinates/control1_coord.json';
-document.getElementById('file2').value = './gait_coordinates/als1_coord.json';
+// Function to update the labels for the graphs based on the selected diseases
+function updateGraphLabels() {
+    const disease1 = document.getElementById('file1').selectedOptions[0].text;
+    const disease2 = document.getElementById('file2').selectedOptions[0].text;
+    document.getElementById('label-disease1').textContent = disease1;
+    document.getElementById('label-disease2').textContent = disease2;
+    updateNarrativeText(`Comparing the walking paths of ${disease1} and ${disease2}.`);
+}
 
 // Update graphs (but no animation) when dropdown changes
 document.getElementById('file1').addEventListener('change', () => {
+    updateGraphLabels();
     const file1 = document.getElementById('file1').value;
     const file2 = document.getElementById('file2').value;
     loadFootprints(file1, file2);  // Reload without animation
 });
 
 document.getElementById('file2').addEventListener('change', () => {
+    updateGraphLabels();
     const file1 = document.getElementById('file1').value;
     const file2 = document.getElementById('file2').value;
     loadFootprints(file1, file2);  // Reload without animation
 });
+
+// Load default data on page load (no animation)
+loadFootprints("./gait_coordinates/control1_coord.json", "./gait_coordinates/park1_coord.json");
+
+// Set dropdown values to match loaded files
+document.getElementById('file1').value = './gait_coordinates/control1_coord.json';
+document.getElementById('file2').value = './gait_coordinates/park1_coord.json';
+
+updateGraphLabels();
+updateNarrativeText('Use the controls below to compare the walking paths of different diseases.');
 
 window.startAnimation = startAnimation;
 
