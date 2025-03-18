@@ -352,6 +352,8 @@ updateNarrativeText('Use the controls below to compare the walking paths of diff
 
 window.startAnimation = startAnimation;
 
+
+//Main Visualization
 // Function to animate a single walking path without displaying y-axis
 function animateWalkingPaths(files, svgIds, yOffset = 0, labelTexts = []) {
     Promise.all(files.map(file => d3.json(file))).then(datasets => {
@@ -496,7 +498,11 @@ const descriptions = [
     "This is the pace of a person with Parkinson's Disease. \nA neurological disorder that affects movement.\nIt is typically characterized by tremors, stiffness, slowness and impaired balance.",
     "Other neurological disorders such as Huntington's Disease also affect Gait due to uncontrollable movement and loss of motor control.",
     "Changes in Gait take many variations whether it's simply walking slower, lack of an arm swing on a single side, shuffling, a forward lean causing quicker steps, and more.",
-    "Parkingson's in particular has a gait named after it.\n Parkingsonian Gait is characterized by slow, little, shuffling steps with the body bent forward."
+    "For example, Parkingson's has a gait named after it.\n Parkingsonian Gait is characterized by slow, little, shuffling steps with the body bent forward.",
+    "But there's no cut and dry way to distinguish which disease is being developed. Even within Parkingson's Disease, there are differences in Gait regardless of stage as seen between the mid and advanced stages.",
+    "The same can be said for other neurological disorders such as Alzheimer's Disease.",
+    "Therefore, Gait analysis can be a window to a person's overall health and can be used to detect early signs of neurological disorders. \nThis is alongside other symtpoms such as: \nmemory loss,  behavioral changes, and speech/cognitive impairments.",
+    "Catching these early signs can lead to a huge difference with early intervention and treatment to slow neurodegeneration within loved ones."
 ];
 
 const files = [
@@ -583,20 +589,17 @@ d3.select("#visualization-container").on("click", function() {
         // Update the description to talk about Huntington's disease
         d3.select("#description").text(descriptions[5]);
         
-        // Hide the healthy person graph
-        d3.select("#combined-walking-path").style("opacity", 0);
-        
         // Reset transformations and set proper vertical spacing between graphs
         d3.select("#second-walking-path") // Parkingon's low
-            .style("transform", "translateY(-300px)")
+            .style("transform", "translateY(-200px)")
             .style("opacity", 1);
         
         d3.select("#third-walking-path") // Parkingsons's mid stage
-            .style("transform", "translateY(-200px)") // Use positive value to move DOWN
+            .style("transform", "translateY(-100px)") // Use positive value to move DOWN
             .style("opacity", 1);
         
         d3.select("#fourth-walking-path") // Parkingson's advanced stage
-            .style("transform", "translateY(-100px)") // Use positive value to move DOWN
+            .style("transform", "translateY(0px)") // Use positive value to move DOWN
             .style("opacity", 1);
         
         // Use the Huntington's disease files
@@ -607,9 +610,134 @@ d3.select("#visualization-container").on("click", function() {
         animateWalkingPaths([parkFiles[0]], ["#second-walking-path"], 0, [parkLabels[0]]);
         animateWalkingPaths([parkFiles[1]], ["#third-walking-path"], 0, [parkLabels[1]]);
         animateWalkingPaths([parkFiles[2]], ["#fourth-walking-path"], 0, [parkLabels[2]]);
-        
-        d3.select("#scroll-prompt")
+    } else if (step === 7) { 
+        //change description
+        d3.select("#description").text(descriptions[6]);
+    }  else if (step === 8) { 
+        // Reset graphs and change to alzheimer's
+        d3.select("#second-walking-path") // Alz's low
+            .style("transform", "translateY(-200px)")
             .style("opacity", 1);
+        
+        d3.select("#third-walking-path") // Alz's mid stage
+            .style("transform", "translateY(-100px)") 
+            .style("opacity", 1);
+        
+        d3.select("#fourth-walking-path") // Alz's advanced stage
+            .style("transform", "translateY(0px)") 
+            .style("opacity", 1);
+        
+        // Use the Alz's disease files
+        const alzFiles = [files[6], files[7], files[8]]; // low, mid, and advanced stages
+        const alzLabels = [labelTexts[7], labelTexts[8], labelTexts[9]]; // Labels for these stages
+        
+        // Animate the three Huntington's cases with their updated positions
+        animateWalkingPaths([alzFiles[0]], ["#second-walking-path"], 0, [alzLabels[0]]);
+        animateWalkingPaths([alzFiles[1]], ["#third-walking-path"], 0, [alzLabels[1]]);
+        animateWalkingPaths([alzFiles[2]], ["#fourth-walking-path"], 0, [alzLabels[2]]);
+        d3.select("#description").text(descriptions[7]);
+    } else if (step === 9) {
+        // Final comparison view - comprehensive comparison
+        d3.select("#description").text(descriptions[9]);
+    
+        // Shift existing graphs to the left
+        d3.select("#combined-walking-path")
+            .style("transform", "translate(-300px, -325px)");
+        d3.select("#second-walking-path")
+            .style("transform", "translate(-300px, -200px)")  // Move left and maintain vertical position
+            .style("opacity", 1);
+        
+        d3.select("#third-walking-path")
+            .style("transform", "translate(-300px, -100px)")  // Move left and maintain vertical position
+            .style("opacity", 1);
+        
+        d3.select("#fourth-walking-path")
+            .style("transform", "translate(-300px, 0px)")  // Move left and maintain vertical position
+            .style("opacity", 1);
+        
+        // Create new SVG elements for the right side if they don't exist
+        if (!document.querySelector("#fifth-walking-path")) {
+            d3.select("#visualization-container")
+                .append("svg")
+                .attr("id", "fifth-walking-path")
+                .attr("class", "walking-path-svg")
+                .style("opacity", 0);  // Start hidden
+        }
+        
+        if (!document.querySelector("#sixth-walking-path")) {
+            d3.select("#visualization-container")
+                .append("svg")
+                .attr("id", "sixth-walking-path")
+                .attr("class", "walking-path-svg")
+                .style("opacity", 0);  // Start hidden
+        }
+        
+        if (!document.querySelector("#seventh-walking-path")) {
+            d3.select("#visualization-container")
+                .append("svg")
+                .attr("id", "seventh-walking-path")
+                .attr("class", "walking-path-svg")
+                .style("opacity", 0);  // Start hidden
+        }
+    
+        if (!document.querySelector("#eighth-walking-path")) {
+            d3.select("#visualization-container")
+                .append("svg")
+                .attr("id", "eighth-walking-path")
+                .attr("class", "walking-path-svg")
+                .style("opacity", 0);  // Start hidden
+        }
+        
+        // Position and show the new SVGs on the right side
+        d3.select("#fifth-walking-path")
+            .style("transform", "translate(300px, -300px)")  // Position on the right at top
+            .transition()
+            .duration(500)
+            .style("opacity", 1);
+        
+        d3.select("#sixth-walking-path")
+            .style("transform", "translate(300px, -200px)")  // Position on the right
+            .transition()
+            .duration(500)
+            .style("opacity", 1);
+        
+        d3.select("#seventh-walking-path")
+            .style("transform", "translate(300px, -100px)")  // Position on the right
+            .transition()
+            .duration(500)
+            .style("opacity", 1);
+        
+        d3.select("#eighth-walking-path")
+            .style("transform", "translate(300px, 0px)")  // Position on the right at bottom
+            .transition()
+            .duration(500)
+            .style("opacity", 1);
+        
+        // Create arrays for the new SVG IDs and display healthy people's gaits on the right
+        const rightSvgIds = [
+            "#fifth-walking-path",
+            "#sixth-walking-path",
+            "#seventh-walking-path",
+            "#eighth-walking-path"
+        ];
+        
+        // Use healthy person files for different paces
+        const lastFiles = [files[0], files[12], files[13], files[14]]; // Various healthy gaits
+        const lastLabels = [labelTexts[0], labelTexts[13], labelTexts[14], labelTexts[15]]; // Healthy labels
+        
+        // Animate the healthy walking patterns on the right side
+        animateWalkingPaths([lastFiles[0]], [rightSvgIds[0]], 0, [lastLabels[0]]);
+        animateWalkingPaths([lastFiles[1]], [rightSvgIds[1]], 0, [lastLabels[1]]);
+        animateWalkingPaths([lastFiles[2]], [rightSvgIds[2]], 0, [lastLabels[2]]);
+        animateWalkingPaths([lastFiles[3]], [rightSvgIds[3]], 0, [lastLabels[3]]);
+
+        // Delay the scroll prompt appearance by 3 seconds (3000 milliseconds)
+        setTimeout(() => {
+            d3.select("#scroll-prompt")
+                .transition()
+                .duration(1000)  // Fade in over 1 second
+                .style("opacity", 1);
+        }, 2000);  // 3-second delay
     } else {
         d3.select("#visualization-container").style("pointer-events", "none");
     }

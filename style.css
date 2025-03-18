@@ -84,6 +84,20 @@ svg#fourth-walking-path {
     transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
+svg#fifth-walking-path,
+svg#sixth-walking-path,
+svg#seventh-walking-path,
+svg#eighth-walking-path {
+    width: 100%;
+    height: 150px; /* Match the height of other walking paths */
+    max-width: 600px; /* Adjust as needed */
+    display: block;
+    margin: auto;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    position: absolute;
+    opacity: 0; /* Initially hidden */
+}
+
 svg#combined-walking-path {
     opacity: 0; /* Ensure the first graph is initially hidden */
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
@@ -105,6 +119,22 @@ svg#fourth-walking-path {
     position: absolute;
     top: 300px; /* Position it below the third graph */
     opacity: 0;
+}
+
+svg#fifth-walking-path {
+    top: 300px;
+}
+
+svg#sixth-walking-path {
+    top: 300px;
+}
+
+svg#seventh-walking-path {
+    top: 300px;
+}
+
+svg#eighth-walking-path {
+    top: 300px;
 }
 
 #gait-animation-container {
