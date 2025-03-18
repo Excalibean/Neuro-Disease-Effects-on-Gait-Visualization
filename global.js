@@ -675,7 +675,7 @@ const descriptions = [
     "For example, Parkingson's has a gait named after it.\n Parkingsonian Gait is characterized by slow, little, shuffling steps with the body bent forward.",
     "But there's no cut and dry way to distinguish which disease is being developed. Even within Parkingson's Disease, there are differences in Gait regardless of stage as seen between the mid and advanced stages.",
     "The same can be said for other neurological disorders such as Amyotrophic Lateral Sclerosis (ALS).",
-    "Therefore, Gait analysis can be a window to a person's overall health and can be used to detect early signs of neurological disorders. \nThis is alongside other symtpoms such as: \nmemory loss,  behavioral changes, and speech/cognitive impairments.",
+    "Therefore, Gait analysis can be a window to a person's overall health and can be used to detect early signs of neurological disorders alongside other symptoms such as: memory loss, behavioral changes, and speech/cognitive impairments.",
     "Catching these early signs can lead to a huge difference with early intervention and treatment to slow neurodegeneration within loved ones."
 ];
 
@@ -739,7 +739,7 @@ d3.select("#visualization-container").on("click", function() {
         d3.select("#description-container")
             .transition()
             .duration(300)
-            .style("top", "120px")
+            .style("top", "100px")
             .style("right", "80px")
             .style("transform", "translate(0, 0)");
         d3.select("#combined-walking-path").style("transform", "translateY(-125px)");
@@ -812,7 +812,7 @@ d3.select("#visualization-container").on("click", function() {
         d3.select("#description").text(descriptions[7]);
     } else if (step === 9) {
         // Final comparison view - comprehensive comparison
-        d3.select("#description").text(descriptions[9]);
+        d3.select("#description").text(descriptions[8]);
     
         // Shift existing graphs to the left
         d3.select("#combined-walking-path")
@@ -904,14 +904,16 @@ d3.select("#visualization-container").on("click", function() {
         animateWalkingPaths([lastFiles[1]], [rightSvgIds[1]], 0, [lastLabels[1]]);
         animateWalkingPaths([lastFiles[2]], [rightSvgIds[2]], 0, [lastLabels[2]]);
         animateWalkingPaths([lastFiles[3]], [rightSvgIds[3]], 0, [lastLabels[3]]);
-
+    } else if (step === 10) {
+        // last description
+        d3.select("#description").text(descriptions[9]);
         // Delay the scroll prompt appearance by 3 seconds (3000 milliseconds)
         setTimeout(() => {
             d3.select("#scroll-prompt")
                 .transition()
                 .duration(1000)  // Fade in over 1 second
                 .style("opacity", 1);
-        }, 2000);  // 3-second delay
+        }, 1000);  // 3-second delay
     } else {
         d3.select("#visualization-container").style("pointer-events", "none");
     }

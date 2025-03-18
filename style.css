@@ -20,7 +20,7 @@ body {
     background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white background */
     border-radius: 12px; /* Rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    padding: 20px; /* Add padding inside the box */
+    padding: 15px; /* Add padding inside the box */
     max-width: 550px; /* Control the width */
     position: absolute; /* Use absolute positioning */
     left: 50%; /* Position from the left edge of the parent */
@@ -168,8 +168,8 @@ svg#eighth-walking-path {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 600px;
-    max-height: 600px;
+    max-width: 500px;
+    max-height: 500px;
 }
 
 svg#gait-animation {
