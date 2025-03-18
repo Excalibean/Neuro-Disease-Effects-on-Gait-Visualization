@@ -1,9 +1,10 @@
 console.log("Its Alive");
 
-// **Gait-Animation Prototype**
+// **Gait-Animation Top-Down**
 
-// Function to load and animate data
-function loadAndAnimateData(file) {
+// Function to load and animate data with shadow reference stride
+function loadAndAnimateData(file, referenceFile = null) {
+    // First load the main data
     d3.json(file).then(data => {
         let patient = data[0]; // Use the first patient in the file
 
@@ -41,29 +42,186 @@ function loadAndAnimateData(file) {
             .attr("r", 25)               // Set larger radius for visibility
             .attr("fill", "black");
 
-        // Walking animation function
-        function animateFeet() {
-            // Left foot movement (swing up and down)
-            leftFoot.transition().duration(leftSwing)
-                .attr("cy", groundY - 30)  // Lift up during swing (increase height)
-                .transition().duration(leftStride - leftSwing)
-                .attr("cy", groundY);      // Return to ground
-
-            // Right foot movement (delayed)
-            rightFoot.transition().delay(leftStride / 2).duration(rightSwing)
-                .attr("cy", groundY - 30)  // Lift up during swing (increase height)
-                .transition().duration(rightStride - rightSwing)
-                .attr("cy", groundY);      // Return to ground
+        // Create shadow feet (reference stride) if a reference file is provided
+        let leftShadow, rightShadow, referenceName;
+        
+        function loadReference() {
+            if (referenceFile) {
+                // Load the reference data
+                d3.json(referenceFile).then(refData => {
+                    let refPatient = refData[0];
+                    
+                    // Get the name of the reference for the legend
+                    referenceName = referenceFile.split('/').pop().split('.')[0];
+                    
+                    // Add shadow feet (reference stride)
+                    leftShadow = svg.append("circle")
+                        .attr("cx", width / 2 - 50)
+                        .attr("cy", groundY)
+                        .attr("r", 20)  // Slightly smaller than main feet
+                        .attr("fill", "rgba(128, 128, 128, 0.3)") // Translucent gray
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 1);
+                        
+                    rightShadow = svg.append("circle")
+                        .attr("cx", width / 2 + 50)
+                        .attr("cy", groundY)
+                        .attr("r", 20)
+                        .attr("fill", "rgba(128, 128, 128, 0.3)") // Translucent gray
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 1);
+                    
+                    // Add legend
+                    const legend = svg.append("g")
+                        .attr("transform", `translate(${width - 70}, 20)`);
+                    
+                    // Current patient legend item
+                    legend.append("circle")
+                        .attr("r", 6)
+                        .attr("fill", "black");
+                        
+                    legend.append("text")
+                        .attr("x", 12)
+                        .attr("y", 4)
+                        .text(file.split('/').pop().split('.')[0])
+                        .style("font-size", "10px");
+                        
+                    // Reference patient legend item
+                    legend.append("circle")
+                        .attr("r", 5)
+                        .attr("cy", 15)
+                        .attr("fill", "rgba(128, 128, 128, 0.5)")
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 0.5);
+                        
+                    legend.append("text")
+                        .attr("x", 12)
+                        .attr("y", 19)
+                        .text(referenceName)
+                        .style("font-size", "10px");
+                    
+                    // Start the animation with both main and shadow feet
+                    animateWithReference(refPatient);
+                });
+            } else {
+                // If no reference, just animate the main feet
+                animateWithoutReference();
+            }
         }
+        
+        function animateWithReference(refPatient) {
+            let refLeftStride = refPatient.left_stride * 1000;
+            let refRightStride = refPatient.right_stride * 1000;
+            let refLeftSwing = refPatient.left_swing * 1000;
+            let refRightSwing = refPatient.right_swing * 1000;
+            
+            // Main feet animation
+            function animateMainFeet() {
+                // Left foot movement (swing up and down)
+                leftFoot.transition().duration(leftSwing)
+                    .attr("cy", groundY - 30)  // Lift up during swing
+                    .transition().duration(leftStride - leftSwing)
+                    .attr("cy", groundY);      // Return to ground
 
-        // Loop animation
-        setInterval(animateFeet, Math.max(leftStride, rightStride));
-        animateFeet(); // Start animation
+                // Right foot movement (delayed)
+                rightFoot.transition().delay(leftStride / 2).duration(rightSwing)
+                    .attr("cy", groundY - 30)  // Lift up during swing
+                    .transition().duration(rightStride - rightSwing)
+                    .attr("cy", groundY);      // Return to ground
+            }
+            
+            // Shadow feet animation
+            function animateShadowFeet() {
+                // Left shadow movement
+                leftShadow.transition().duration(refLeftSwing)
+                    .attr("cy", groundY - 30)  // Lift up during swing
+                    .transition().duration(refLeftStride - refLeftSwing)
+                    .attr("cy", groundY);      // Return to ground
+
+                // Right shadow movement (delayed)
+                rightShadow.transition().delay(refLeftStride / 2).duration(refRightSwing)
+                    .attr("cy", groundY - 30)  // Lift up during swing
+                    .transition().duration(refRightStride - refRightSwing)
+                    .attr("cy", groundY);      // Return to ground
+            }
+
+            // Loop animations
+            setInterval(animateMainFeet, Math.max(leftStride, rightStride));
+            setInterval(animateShadowFeet, Math.max(refLeftStride, refRightStride));
+            
+            // Start animations
+            animateMainFeet();
+            animateShadowFeet();
+        }
+        
+        function animateWithoutReference() {
+            function animateFeet() {
+                // Left foot movement (swing up and down)
+                leftFoot.transition().duration(leftSwing)
+                    .attr("cy", groundY - 30)  // Lift up during swing
+                    .transition().duration(leftStride - leftSwing)
+                    .attr("cy", groundY);      // Return to ground
+
+                // Right foot movement (delayed)
+                rightFoot.transition().delay(leftStride / 2).duration(rightSwing)
+                    .attr("cy", groundY - 30)  // Lift up during swing
+                    .transition().duration(rightStride - rightSwing)
+                    .attr("cy", groundY);      // Return to ground
+            }
+
+            // Loop animation
+            setInterval(animateFeet, Math.max(leftStride, rightStride));
+            animateFeet(); // Start animation
+        }
+        
+        // Start the appropriate animation
+        loadReference();
     });
 }
 
-// Initial load
-loadAndAnimateData("park1.json");
+// Initial load with healthy reference
+loadAndAnimateData("park1.json", "control1.json");
+
+// Add a reference selector dropdown
+let referenceSelector = d3.select("#gait-animation-container")
+    .append("div")
+    .attr("class", "reference-selector")
+    .style("margin-top", "10px")
+    .style("display", "flex")
+    .style("justify-content", "center")
+    .style("align-items", "center");
+
+referenceSelector.append("label")
+    .attr("for", "reference-file")
+    .text("Reference Stride: ")
+    .style("margin-right", "10px");
+
+referenceSelector.append("select")
+    .attr("id", "reference-file")
+    .on("change", function() {
+        const selectedFile = d3.select("#file-selector").property("value");
+        const selectedReference = d3.select(this).property("value");
+        loadAndAnimateData(selectedFile, selectedReference === "none" ? null : selectedReference);
+    })
+    .selectAll("option")
+    .data([
+        {value: "none", text: "None"},
+        {value: "control1.json", text: "Healthy Person"},
+        {value: "park1.json", text: "Parkinson's Disease"},
+        {value: "hunt1.json", text: "Huntington's Disease"},
+        {value: "als1.json", text: "ALS"}
+    ])
+    .enter()
+    .append("option")
+    .attr("value", d => d.value)
+    .text(d => d.text);
+
+// Update the existing file selector to consider reference
+d3.select("#file-selector").on("change", function() {
+    let selectedFile = d3.select(this).property("value");
+    let selectedReference = d3.select("#reference-file").property("value");
+    loadAndAnimateData(selectedFile, selectedReference === "none" ? null : selectedReference);
+});
 
 // Handle dropdown change
 d3.select("#file-selector").on("change", function() {
@@ -563,7 +721,7 @@ const descriptions = [
     "For example, Parkingson's has a gait named after it.\n Parkingsonian Gait is characterized by slow, little, shuffling steps with the body bent forward.",
     "But there's no cut and dry way to distinguish which disease is being developed. Even within Parkingson's Disease, there are differences in Gait regardless of stage as seen between the mid and advanced stages.",
     "The same can be said for other neurological disorders such as Amyotrophic Lateral Sclerosis (ALS).",
-    "Therefore, Gait analysis can be a window to a person's overall health and can be used to detect early signs of neurological disorders. \nThis is alongside other symtpoms such as: \nmemory loss,  behavioral changes, and speech/cognitive impairments.",
+    "Therefore, Gait analysis can be a window to a person's overall health and can be used to detect early signs of neurological disorders alongside other symptoms such as: memory loss, behavioral changes, and speech/cognitive impairments.",
     "Catching these early signs can lead to a huge difference with early intervention and treatment to slow neurodegeneration within loved ones."
 ];
 
@@ -627,21 +785,21 @@ d3.select("#visualization-container").on("click", function() {
         d3.select("#description-container")
             .transition()
             .duration(300)
-            .style("top", "120px")
+            .style("top", "100px")
             .style("right", "80px")
             .style("transform", "translate(0, 0)");
-        d3.select("#combined-walking-path").style("transform", "translateY(-125px)");
+        d3.select("#combined-walking-path").style("transform", "translateY(-75px)");
         d3.select("#second-walking-path").style("opacity", 1);
         animateWalkingPaths(files.slice(0, 2), svgIds.slice(0, 2), 0, labelTexts.slice(0, 2));
     } else if (step === 4) {
         d3.select("#description").text(descriptions[3]);
-        d3.select("#combined-walking-path").style("transform", "translateY(-225px)");
+        d3.select("#combined-walking-path").style("transform", "translateY(-175px)");
         d3.select("#second-walking-path").style("transform", "translateY(-100px)");
         d3.select("#third-walking-path").style("opacity", 1);
         animateWalkingPaths(files.slice(0, 3), svgIds.slice(0, 3), 0, labelTexts.slice(0, 3));
     } else if (step === 5) {
         d3.select("#description").text(descriptions[4]);
-        d3.select("#combined-walking-path").style("transform", "translateY(-325px)");
+        d3.select("#combined-walking-path").style("transform", "translateY(-275px)");
         d3.select("#second-walking-path").style("transform", "translateY(-200px)");
         d3.select("#third-walking-path").style("transform", "translateY(-100px)");
         d3.select("#fourth-walking-path").style("opacity", 1);
@@ -700,11 +858,11 @@ d3.select("#visualization-container").on("click", function() {
         d3.select("#description").text(descriptions[7]);
     } else if (step === 9) {
         // Final comparison view - comprehensive comparison
-        d3.select("#description").text(descriptions[9]);
+        d3.select("#description").text(descriptions[8]);
     
         // Shift existing graphs to the left
         d3.select("#combined-walking-path")
-            .style("transform", "translate(-300px, -325px)");
+            .style("transform", "translate(-300px, -275px)");
         d3.select("#second-walking-path")
             .style("transform", "translate(-300px, -200px)")  // Move left and maintain vertical position
             .style("opacity", 1);
@@ -792,14 +950,16 @@ d3.select("#visualization-container").on("click", function() {
         animateWalkingPaths([lastFiles[1]], [rightSvgIds[1]], 0, [lastLabels[1]]);
         animateWalkingPaths([lastFiles[2]], [rightSvgIds[2]], 0, [lastLabels[2]]);
         animateWalkingPaths([lastFiles[3]], [rightSvgIds[3]], 0, [lastLabels[3]]);
-
+    } else if (step === 10) {
+        // last description
+        d3.select("#description").text(descriptions[9]);
         // Delay the scroll prompt appearance by 3 seconds (3000 milliseconds)
         setTimeout(() => {
             d3.select("#scroll-prompt")
                 .transition()
                 .duration(1000)  // Fade in over 1 second
                 .style("opacity", 1);
-        }, 2000);  // 3-second delay
+        }, 1000);  // 3-second delay
     } else {
         d3.select("#visualization-container").style("pointer-events", "none");
     }

@@ -2,7 +2,56 @@ body {
     font-family: Arial, sans-serif;
     margin: 0.5em;
     padding: 0.5em;
-    background-color: #f0f0f0;
+    background-color: #e6e6e6;
+}
+
+/* Two-column layout */
+.two-column-layout {
+    display: flex;
+    margin: 20px 0;
+}
+
+/* Change flex proportions - give visuals more space than text */
+.column.left-column {
+    flex: 3; /* Visual column gets 3 parts of the available space */
+}
+
+.column.right-column {
+    flex: 2; /* Text column gets 2 parts of the available space */
+}
+
+/* For the second section where the order is reversed */
+.two-column-layout.reversed .left-column {
+    order: 1;
+}
+
+.two-column-layout.reversed .right-column {
+    order: 2;
+}
+
+/* Make the explanation text container fit better */
+.explanation-text {
+    padding: 15px; /* Reduce padding */
+    background-color: rgb(238, 238, 238);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    height: auto; /* Let it adjust to content height */
+    min-height: 500px; /* Set minimum height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.explanation-text h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+/* Make the text a bit more compact */
+.explanation-text p {
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-size: 0.95em; /* Slightly smaller font */
 }
 
 #tooltip {
@@ -15,23 +64,49 @@ body {
     display: none;
 }
 
+/* Styles for the description box */
 #description-container {
-    text-align: center;
-    margin-bottom: 20px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: all 1s ease-in-out;
+    background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white background */
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 15px; /* Add padding inside the box */
+    max-width: 550px; /* Control the width */
+    position: absolute; /* Use absolute positioning */
+    left: 50%; /* Position from the left edge of the parent */
+    top: 50%; /* Position from the top edge of the parent */
+    transform: translate(-50%, -50%); /* Center it perfectly */
+    z-index: 10; /* Ensure it appears above other elements */
+    transition: all 0.5s ease-in-out; /* Smooth transitions for any changes */
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Very subtle border */
 }
 
+#description {
+    margin: 0; /* Remove any default margins */
+    font-size: 16px; /* Adjust as needed */
+    line-height: 1.6; /* Improve readability with line spacing */
+    color: #333; /* Dark gray text color */
+}
+
+/* Optional: Add a small pulse animation when the description changes */
+@keyframes pulse {
+    0% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+    50% { box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); }
+    100% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+}
+
+.description-highlight {
+    animation: pulse 1s ease-in-out;
+}
+
+/* Main viz styles */
 #visualization-container {
     cursor: pointer; /* Make the cursor a pointer to indicate it's clickable */
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-    height: 800px; /* Adjust height to accommodate all four graphs */
+    margin-top: 6em;
+    height: 700px; /* Adjust height to accommodate all four graphs */
 }
 
 .graph-container {
@@ -137,14 +212,16 @@ svg#eighth-walking-path {
     top: 300px;
 }
 
+/* Gait top-down view animation styles */
 #gait-animation-container {
     border: 2px solid black;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 600px;
-    max-height: 600px;
+    max-width: 500px;
+    max-height: 500px;
+    margin: 0 auto
 }
 
 svg#gait-animation {
@@ -162,9 +239,16 @@ svg#gait-animation {
     text-align: center;
 }
 
-svg#gait-animation circle {
-    color: black;
-    fill: black;
+
+
+.reference-selector {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.reference-selector select {
+    padding: 3px;
+    width: 180px;
 }
 
 select {
@@ -184,7 +268,7 @@ label {
     font-size: 16px;
     color: #333;
     position: absolute;
-    bottom: 200px; /* Adjust this value to move the prompt higher or lower */
+    bottom: 150px; /* Adjust this value to move the prompt higher or lower */
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -206,7 +290,7 @@ label {
     transform: rotate(90deg); /* Rotate to point downwards */
 }
 
-/* Styles for the dots in the graphs */
+/* Styles for the dots in the graphs (main viz) */
 .foot {
     stroke: black; /* Black outline */
     stroke-width: 0.2px;
@@ -240,13 +324,14 @@ label {
     fill: #D55E00; /* Vermilion */
 }
 
+/*Walking Path graph styles*/
 #walking-path-comparison-container {
     border: 2px solid black;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 1100px;
+    max-width: 100%;
     margin: 20px auto;
 }
 
