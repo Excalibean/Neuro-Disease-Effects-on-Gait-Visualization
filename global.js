@@ -119,13 +119,13 @@ function loadAndAnimateData(file, referenceFile = null) {
             function animateMainFeet() {
                 // Left foot movement (swing up and down)
                 leftFoot.transition().duration(leftSwing)
-                    .attr("cy", groundY - 30)  // Lift up during swing
+                    .attr("cy", groundY - 50)  // Lift up during swing
                     .transition().duration(leftStride - leftSwing)
                     .attr("cy", groundY);      // Return to ground
 
                 // Right foot movement (delayed)
                 rightFoot.transition().delay(leftStride / 2).duration(rightSwing)
-                    .attr("cy", groundY - 30)  // Lift up during swing
+                    .attr("cy", groundY - 50)  // Lift up during swing
                     .transition().duration(rightStride - rightSwing)
                     .attr("cy", groundY);      // Return to ground
             }
@@ -134,13 +134,13 @@ function loadAndAnimateData(file, referenceFile = null) {
             function animateShadowFeet() {
                 // Left shadow movement
                 leftShadow.transition().duration(refLeftSwing)
-                    .attr("cy", groundY - 30)  // Lift up during swing
+                    .attr("cy", groundY - 50)  // Lift up during swing
                     .transition().duration(refLeftStride - refLeftSwing)
                     .attr("cy", groundY);      // Return to ground
 
                 // Right shadow movement (delayed)
                 rightShadow.transition().delay(refLeftStride / 2).duration(refRightSwing)
-                    .attr("cy", groundY - 30)  // Lift up during swing
+                    .attr("cy", groundY - 50)  // Lift up during swing
                     .transition().duration(refRightStride - refRightSwing)
                     .attr("cy", groundY);      // Return to ground
             }
@@ -180,7 +180,7 @@ function loadAndAnimateData(file, referenceFile = null) {
 }
 
 // Initial load with healthy reference
-loadAndAnimateData("park1.json", "control1.json");
+loadAndAnimateData("./strides/park1.json", "./strides/control1.json");
 
 // Add a reference selector dropdown
 let referenceSelector = d3.select("#gait-animation-container")
@@ -206,10 +206,16 @@ referenceSelector.append("select")
     .selectAll("option")
     .data([
         {value: "none", text: "None"},
-        {value: "control1.json", text: "Healthy Person"},
-        {value: "park1.json", text: "Parkinson's Disease"},
-        {value: "hunt1.json", text: "Huntington's Disease"},
-        {value: "als1.json", text: "ALS"}
+        {value: "./strides/control1.json", text: "Control (Healthy)"},
+        {value: "./strides/park2.json", text: "Parkinson's (Least Severe)"},
+        {value: "./strides/park11.json", text: "Parkinson's (Median)"},
+        {value: "./strides/park1.json", text: "Parkinson's (Most Severe)"},
+        {value: "./strides/als1.json", text: "ALS (Earliest)"},
+        {value: "./strides/als3.json", text: "ALS (Median)"},
+        {value: "./strides/als9.json", text: "ALS (Later)"},
+        {value: "./strides/hunt9.json", text: "Huntington's (Least Severe)"},
+        {value: "./strides/hunt1.json", text: "Huntington's (Median)"},
+        {value: "./strides/hunt19.json", text: "Huntington's (Severe)"}
     ])
     .enter()
     .append("option")
