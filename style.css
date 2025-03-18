@@ -368,6 +368,9 @@ label {
     margin-top: 20px;
     flex-wrap: wrap;
 }
+.two-column-layout {
+    gap: 20px; 
+}
 #walking-path-container .graph-wrapper {
     display: flex;
     flex-direction: column;
@@ -378,14 +381,13 @@ label {
 #walking-path-container .graph-label {
     font-size: 16px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 #walking-path-container .timer {
     font-size: 14px;
     color: #333;
     margin-top: 5px;
 }
-
 #walking-path-container .annotation {
     font-size: 14px;
     color: #666;
