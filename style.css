@@ -15,14 +15,38 @@ body {
     display: none;
 }
 
+/* Styles for the description box */
 #description-container {
-    text-align: center;
-    margin-bottom: 20px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: all 1s ease-in-out;
+    background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white background */
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px; /* Add padding inside the box */
+    max-width: 550px; /* Control the width */
+    position: absolute; /* Use absolute positioning */
+    left: 50%; /* Position from the left edge of the parent */
+    top: 50%; /* Position from the top edge of the parent */
+    transform: translate(-50%, -50%); /* Center it perfectly */
+    z-index: 10; /* Ensure it appears above other elements */
+    transition: all 0.5s ease-in-out; /* Smooth transitions for any changes */
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Very subtle border */
+}
+
+#description {
+    margin: 0; /* Remove any default margins */
+    font-size: 16px; /* Adjust as needed */
+    line-height: 1.6; /* Improve readability with line spacing */
+    color: #333; /* Dark gray text color */
+}
+
+/* Optional: Add a small pulse animation when the description changes */
+@keyframes pulse {
+    0% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+    50% { box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); }
+    100% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+}
+
+.description-highlight {
+    animation: pulse 1s ease-in-out;
 }
 
 #visualization-container {
@@ -31,6 +55,7 @@ body {
     flex-direction: column;
     align-items: center;
     position: relative;
+    margin-top: 4em;
     height: 800px; /* Adjust height to accommodate all four graphs */
 }
 
@@ -162,9 +187,16 @@ svg#gait-animation {
     text-align: center;
 }
 
-svg#gait-animation circle {
-    color: black;
-    fill: black;
+
+
+.reference-selector {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.reference-selector select {
+    padding: 3px;
+    width: 180px;
 }
 
 select {
@@ -184,7 +216,7 @@ label {
     font-size: 16px;
     color: #333;
     position: absolute;
-    bottom: 200px; /* Adjust this value to move the prompt higher or lower */
+    bottom: 250px; /* Adjust this value to move the prompt higher or lower */
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
