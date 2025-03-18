@@ -74,7 +74,26 @@ function loadAndAnimateData(file, referenceFile = null) {
                     // Add legend
                     const legend = svg.append("g")
                         .attr("transform", `translate(${width - 70}, 20)`);
-                    
+
+                    // Get friendly names instead of raw file names
+                    function getFriendlyName(filePath) {
+                        // Map file paths to friendly names
+                        const nameMap = {
+                            "./strides/control1.json": "Control (Healthy)",
+                            "./strides/park1.json": "Parkinson's (Most Severe)",
+                            "./strides/park2.json": "Parkinson's (Least Severe)",
+                            "./strides/park11.json": "Parkinson's (Median)",
+                            "./strides/als1.json": "ALS (Earliest)",
+                            "./strides/als3.json": "ALS (Median)",
+                            "./strides/als9.json": "ALS (Later)",
+                            "./strides/hunt1.json": "Huntington's (Median)",
+                            "./strides/hunt9.json": "Huntington's (Least Severe)",
+                            "./strides/hunt19.json": "Huntington's (Severe)"
+                        };
+                        
+                        return nameMap[filePath] || filePath.split('/').pop().split('.')[0];
+                    }
+
                     // Current patient legend item
                     legend.append("circle")
                         .attr("r", 6)
@@ -83,21 +102,21 @@ function loadAndAnimateData(file, referenceFile = null) {
                     legend.append("text")
                         .attr("x", 12)
                         .attr("y", 4)
-                        .text(file.split('/').pop().split('.')[0])
+                        .text(getFriendlyName(file))
                         .style("font-size", "10px");
                         
                     // Reference patient legend item
                     legend.append("circle")
                         .attr("r", 5)
                         .attr("cy", 15)
-                        .attr("fill", "rgba(128, 128, 128, 0.5)")
+                        .attr("fill", "rgba(128, 128, 128, 0.3)")
                         .attr("stroke", "black")
                         .attr("stroke-width", 0.5);
                         
                     legend.append("text")
                         .attr("x", 12)
                         .attr("y", 19)
-                        .text(referenceName)
+                        .text(getFriendlyName(referenceFile))
                         .style("font-size", "10px");
                     
                     // Start the animation with both main and shadow feet
@@ -176,11 +195,13 @@ function loadAndAnimateData(file, referenceFile = null) {
         
         // Start the appropriate animation
         loadReference();
+    }).catch(error => {
+        console.error("Error loading the file:", error);
     });
 }
 
 // Initial load with healthy reference
-loadAndAnimateData("./strides/park1.json", "./strides/control1.json");
+loadAndAnimateData("./strides/control1.json", null);
 
 // Add a reference selector dropdown
 let referenceSelector = d3.select("#gait-animation-container")
@@ -226,14 +247,15 @@ referenceSelector.append("select")
 d3.select("#file-selector").on("change", function() {
     let selectedFile = d3.select(this).property("value");
     let selectedReference = d3.select("#reference-file").property("value");
-    loadAndAnimateData(selectedFile, selectedReference === "none" ? null : selectedReference);
+    
+    // Only pass the reference file if it's not "none"
+    if (selectedReference === "none") {
+        loadAndAnimateData(selectedFile, null);
+    } else {
+        loadAndAnimateData(selectedFile, selectedReference);
+    }
 });
 
-// Handle dropdown change
-d3.select("#file-selector").on("change", function() {
-    let selectedFile = d3.select(this).property("value");
-    loadAndAnimateData(selectedFile);
-});
 
 // ** walking path proto **
 
