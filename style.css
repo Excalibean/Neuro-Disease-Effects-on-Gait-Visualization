@@ -54,6 +54,29 @@ body {
     font-size: 0.95em; /* Slightly smaller font */
 }
 
+#more-below {
+    font-size: 16px;
+    color: #333;
+    left: 50%;
+    text-align: center;
+}
+
+#more-below .arrow {
+    display: inline-block;
+    margin: 0 10px;
+    font-size: 20px;
+    vertical-align: middle;
+    transform: rotate(90deg); /* Rotate to point downwards */
+}
+
+#more-below .left-arrow {
+    transform: rotate(90deg); /* Rotate to point downwards */
+}
+
+#more-below .right-arrow {
+    transform: rotate(90deg); /* Rotate to point downwards */
+}
+
 #tooltip {
     position: absolute;
     background: white;
@@ -81,6 +104,7 @@ body {
 }
 
 #description {
+    white-space: pre-line; /* This preserves line breaks */
     margin: 0; /* Remove any default margins */
     font-size: 16px; /* Adjust as needed */
     line-height: 1.6; /* Improve readability with line spacing */

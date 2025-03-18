@@ -1,5 +1,35 @@
 console.log("Its Alive");
 
+// Click to Continue prompt
+const clickPrompt = d3.select("#visualization-container")
+  .append("div")
+  .attr("id", "click-prompt")
+  .style("position", "absolute")
+  .style("bottom", "200px")
+  .style("left", "50%")
+  .style("transform", "translateX(-50%)")
+  .style("background-color", "rgba(255, 255, 255, 0.8)")
+  .style("padding", "10px 20px")
+  .style("border-radius", "20px")
+  .style("box-shadow", "0 2px 5px rgba(0, 0, 0, 0.1)")
+  .style("font-size", "16px")
+  .style("text-align", "center")
+  .style("cursor", "pointer")
+  .style("transition", "opacity 0.5s ease")
+  .html('<span style="animation: pulse 1.5s infinite">👆 Click to Continue</span>')
+  .style("opacity", 1);
+
+// Add a pulsing animation with CSS
+const style = document.createElement('style');
+style.innerHTML = `
+  @keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+  }
+`;
+document.head.appendChild(style);
+
 // **Gait-Animation Top-Down**
 
 // Function to load and animate data with shadow reference stride
@@ -741,7 +771,8 @@ animateWalkingPaths(
 
 let step = 0;
 const descriptions = [
-    "Gait refers to the manner or pattern of walking.\nYour Gait includes the way you walk, your stride length, step width, hip sway, arm sways and walking speed.",
+    "This makes it important to pay attention to the way we walk, or our Gait.",
+    "Your Gait includes the way you walk, your stride length, step width, hip sway, arm sways and walking speed.",
     "This is the pace of a Healthy Person.",
     "This is the pace of a person with Parkinson's Disease. \nA neurological disorder that affects movement.\nIt is typically characterized by tremors, stiffness, slowness and impaired balance.",
     "Other neurological disorders such as Huntington's Disease also affect Gait due to uncontrollable movement and loss of motor control.",
@@ -798,18 +829,29 @@ const labelTexts = [
 ];
 
 d3.select("#visualization-container").on("click", function() {
+    if (step === 0) {
+        clickPrompt.transition()
+            .duration(500) // Longer fade out (500ms instead of 300ms)
+            .style("opacity", 0)
+            .on("end", function() {
+                // Remove from DOM after fade out completes
+                d3.select(this).remove();
+            });
+    }
     step++;
     if (step === 1) {
-        d3.select("#description").text(descriptions[0]);
+        d3.select("#description").html(descriptions[0].replace(/\n/g, '<br>'));
     } else if (step === 2) {
-        d3.select("#description").text(descriptions[1]);
+        d3.select("#description").html(descriptions[1].replace(/\n/g, '<br>'));
+    } else if (step === 3) {
+        d3.select("#description").html(descriptions[2].replace(/\n/g, '<br>'));
         d3.select("#combined-walking-path")
             .transition()
             .duration(500)
             .style("opacity", 1);
         animateWalkingPaths(files.slice(0, 1), svgIds.slice(0, 1), 0, labelTexts.slice(0, 1));
-    } else if (step === 3) {
-        d3.select("#description").text(descriptions[2]);
+    } else if (step === 4) {
+        d3.select("#description").html(descriptions[3].replace(/\n/g, '<br>'));
         d3.select("#description-container")
             .transition()
             .duration(300)
@@ -819,23 +861,23 @@ d3.select("#visualization-container").on("click", function() {
         d3.select("#combined-walking-path").style("transform", "translateY(-75px)");
         d3.select("#second-walking-path").style("opacity", 1);
         animateWalkingPaths(files.slice(0, 2), svgIds.slice(0, 2), 0, labelTexts.slice(0, 2));
-    } else if (step === 4) {
-        d3.select("#description").text(descriptions[3]);
+    } else if (step === 5) {
+        d3.select("#description").html(descriptions[4].replace(/\n/g, '<br>'));
         d3.select("#combined-walking-path").style("transform", "translateY(-175px)");
         d3.select("#second-walking-path").style("transform", "translateY(-100px)");
         d3.select("#third-walking-path").style("opacity", 1);
         animateWalkingPaths(files.slice(0, 3), svgIds.slice(0, 3), 0, labelTexts.slice(0, 3));
-    } else if (step === 5) {
-        d3.select("#description").text(descriptions[4]);
+    } else if (step === 6) {
+        d3.select("#description").html(descriptions[5].replace(/\n/g, '<br>'));
         d3.select("#combined-walking-path").style("transform", "translateY(-275px)");
         d3.select("#second-walking-path").style("transform", "translateY(-200px)");
         d3.select("#third-walking-path").style("transform", "translateY(-100px)");
         d3.select("#fourth-walking-path").style("opacity", 1);
         // Just use the first 4 files that match with your 4 SVG IDs
         animateWalkingPaths(files.slice(0, 4), svgIds, 0, labelTexts.slice(0, 4));
-    } else if (step === 6) {
+    } else if (step === 7) {
         // Update the description to talk about Huntington's disease
-        d3.select("#description").text(descriptions[5]);
+        d3.select("#description").html(descriptions[6].replace(/\n/g, '<br>'));
         
         // Reset transformations and set proper vertical spacing between graphs
         d3.select("#second-walking-path") // Parkingon's low
@@ -858,10 +900,10 @@ d3.select("#visualization-container").on("click", function() {
         animateWalkingPaths([parkFiles[0]], ["#second-walking-path"], 0, [parkLabels[0]]);
         animateWalkingPaths([parkFiles[1]], ["#third-walking-path"], 0, [parkLabels[1]]);
         animateWalkingPaths([parkFiles[2]], ["#fourth-walking-path"], 0, [parkLabels[2]]);
-    } else if (step === 7) { 
+    } else if (step === 8) { 
         //change description
-        d3.select("#description").text(descriptions[6]);
-    }  else if (step === 8) { 
+        d3.select("#description").html(descriptions[7].replace(/\n/g, '<br>'));
+    }  else if (step === 9) { 
         // Reset graphs and change to alzheimer's
         d3.select("#second-walking-path") // Als's low
             .style("transform", "translateY(-200px)")
@@ -883,10 +925,10 @@ d3.select("#visualization-container").on("click", function() {
         animateWalkingPaths([alsFiles[0]], ["#second-walking-path"], 0, [alsLabels[0]]);
         animateWalkingPaths([alsFiles[1]], ["#third-walking-path"], 0, [alsLabels[1]]);
         animateWalkingPaths([alsFiles[2]], ["#fourth-walking-path"], 0, [alsLabels[2]]);
-        d3.select("#description").text(descriptions[7]);
-    } else if (step === 9) {
+        d3.select("#description").html(descriptions[8].replace(/\n/g, '<br>'));
+    } else if (step === 10) {
         // Final comparison view - comprehensive comparison
-        d3.select("#description").text(descriptions[8]);
+        d3.select("#description").html(descriptions[9].replace(/\n/g, '<br>'));
     
         // Shift existing graphs to the left
         d3.select("#combined-walking-path")
@@ -978,9 +1020,9 @@ d3.select("#visualization-container").on("click", function() {
         animateWalkingPaths([lastFiles[1]], [rightSvgIds[1]], 0, [lastLabels[1]]);
         animateWalkingPaths([lastFiles[2]], [rightSvgIds[2]], 0, [lastLabels[2]]);
         animateWalkingPaths([lastFiles[3]], [rightSvgIds[3]], 0, [lastLabels[3]]);
-    } else if (step === 10) {
+    } else if (step === 11) {
         // last description
-        d3.select("#description").text(descriptions[9]);
+        d3.select("#description").html(descriptions[10].replace(/\n/g, '<br>'));
         // Delay the scroll prompt appearance by 3 seconds (3000 milliseconds)
         setTimeout(() => {
             d3.select("#scroll-prompt")
