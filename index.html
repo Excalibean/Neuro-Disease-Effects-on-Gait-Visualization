@@ -10,9 +10,7 @@
 </head>
 <body>
     <h1>Neurological Diseases and Their Effects on Gait: The Hidden Language of Moving</h1>
-    <!-- alt heading? -->
-    <!-- Discover the hidden language of movement: How neurological diseases like Parkinson's, Huntington's, and ALS transform our gait. -->
-
+    
     <div id="description-container">
         <p id="description">What is a Gait?</p>
     </div>
@@ -29,7 +27,67 @@
         </div>
     </div>
 
-    <div id="tooltip"></div>
+    <div id="narrative-container">
+        <p id="narrative-text">Use the controls below to compare the walking paths of different diseases.</p>
+    </div>
+
+    <div id="walking-path-comparison-container">
+        <h2>Walking Path Comparison</h2>
+        <div>
+            <label for="file1">Select Disease 1:</label>
+            <select id="file1">
+                <option value="./gait_coordinates/control14_low.json">Control (Younger Age)</option>
+                <option value="./gait_coordinates/control9_mid.json">Control (Middle Aged)</option>
+                <option value="./gait_coordinates/control12_high.json">Control (Older Age)</option>
+                <option value="./gait_coordinates/park2_low.json">Parkinson's (Early Stage)</option>
+                <option value="./gait_coordinates/park11_mid.json">Parkinson's (Middle Stage)</option>
+                <option value="./gait_coordinates/park1_high.json">Parkinson's (Advanced Stage)</option>
+                <option value="./gait_coordinates/als1_low.json">ALS (Early Stage)</option>
+                <option value="./gait_coordinates/als3_mid.json">ALS (Middle Stage)</option>
+                <option value="./gait_coordinates/als9_high.json">ALS (Advanced Stage)</option>
+                <option value="./gait_coordinates/hunt9_low.json">Huntington's (Early Stage)</option>
+                <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Middle Stage)</option>
+                <option value="./gait_coordinates/hunt19_high.json">Huntington's (Advanced Stage)</option>
+            </select>
+
+            <label for="file2">Select Disease 2:</label>
+            <select id="file2">
+                <option value="./gait_coordinates/control14_low.json">Control (Younger Age)</option>
+                <option value="./gait_coordinates/control9_mid.json">Control (Middle Aged)</option>
+                <option value="./gait_coordinates/control12_high.json">Control (Older Age)</option>
+                <option value="./gait_coordinates/park2_low.json">Parkinson's (Early Stage)</option>
+                <option value="./gait_coordinates/park11_mid.json">Parkinson's (Middle Stage)</option>
+                <option value="./gait_coordinates/park1_high.json">Parkinson's (Advanced Stage)</option>
+                <option value="./gait_coordinates/als1_low.json">ALS (Early Stage)</option>
+                <option value="./gait_coordinates/als3_mid.json">ALS (Middle Stage)</option>
+                <option value="./gait_coordinates/als9_high.json">ALS (Advanced Stage)</option>
+                <option value="./gait_coordinates/hunt9_low.json">Huntington's (Early Stage)</option>
+                <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Middle Stage)</option>
+                <option value="./gait_coordinates/hunt19_high.json">Huntington's (Advanced Stage)</option>
+            </select>
+        
+            <button onclick="startAnimation()">Animate</button>
+        </div>
+        <div id="walking-path-container">
+            <div class="graph-wrapper">
+                <div class="graph-label" id="label-disease1">Disease 1</div>
+                <span id="timer1" class="timer">00:00</span>
+                <div class="graph-and-annotation">
+                    <svg id="walking-path1"></svg>
+                    <div class="annotation" id="annotation1"></div>
+                </div>
+            </div>
+            <div class="graph-wrapper">
+                <div class="graph-label" id="label-disease2">Disease 2</div>
+                <span id="timer2" class="timer">00:00</span>
+                <div class="graph-and-annotation">
+                    <svg id="walking-path2"></svg>
+                    <div class="annotation" id="annotation2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="gait-animation-container">
         <select id="file-selector">
             <option value="control1.json">Control (Healthy)</option>
@@ -41,66 +99,7 @@
         <div id="gait-animation-title">Top-Down View of Walking Strides</div>
     </div>
 
-    <div id="narrative-container">
-        <p id="narrative-text">Use the controls below to compare the walking paths of different diseases.</p>
-    </div>
-
-    <div id="walking-path-comparison-container">
-        <h2>Walking Path Comparison</h2>
-        <div>
-            <label for="file1">Select Disease 1:</label>
-            <select id="file1">
-                <option value="./gait_coordinates/control14_low.json">Control (Younger)</option>
-                <option value="./gait_coordinates/control9_mid.json">Control (Middle)</option>
-                <option value="./gait_coordinates/control12_high.json">Control (Old)</option>
-                <option value="./gait_coordinates/park2_low.json">Parkinson's (Least Severe)</option>
-                <option value="./gait_coordinates/park11_mid.json">Parkinson's (Median)</option>
-                <option value="./gait_coordinates/park1_high.json">Parkinson's (Most Severe)</option>
-                <option value="./gait_coordinates/als1_low.json">ALS (Earliest)</option>
-                <option value="./gait_coordinates/als3_mid.json">ALS (Median)</option>
-                <option value="./gait_coordinates/als9_high.json">ALS (Later)</option>
-                <option value="./gait_coordinates/hunt9_low.json">Huntington's (Least Severe)</option>
-                <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Median)</option>
-                <option value="./gait_coordinates/hunt19_high.json">Huntington's (Severe)</option>
-            </select>
-
-            <label for="file2">Select Disease 2:</label>
-            <select id="file2">
-                <option value="./gait_coordinates/control14_low.json">Control (Younger)</option>
-                <option value="./gait_coordinates/control9_mid.json">Control (Middle)</option>
-                <option value="./gait_coordinates/control12_high.json">Control (Old)</option>
-                <option value="./gait_coordinates/park2_low.json">Parkinson's (Least Severe)</option>
-                <option value="./gait_coordinates/park11_mid.json">Parkinson's (Median)</option>
-                <option value="./gait_coordinates/park1_high.json">Parkinson's (Most Severe)</option>
-                <option value="./gait_coordinates/als1_low.json">ALS (Earliest)</option>
-                <option value="./gait_coordinates/als3_mid.json">ALS (Median)</option>
-                <option value="./gait_coordinates/als9_high.json">ALS (Later)</option>
-                <option value="./gait_coordinates/hunt9_low.json">Huntington's (Least Severe)</option>
-                <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Median)</option>
-                <option value="./gait_coordinates/hunt19_high.json">Huntington's (Severe)</option>
-            </select>
-
-            <!-- <div>
-                <label for="duration-slider">Walking Duration:</label>
-                <input type="range" id="duration-slider" min="5" max="500" value="20" step="5" oninput="updateDurationLabel(this.value)">
-                <span id="duration-label">20</span> seconds
-            </div> -->
-        
-            <button onclick="startAnimation()">Animate</button>
-        </div>
-        <div id="walking-path-container">
-            <div class="graph-wrapper">
-                <div class="graph-label" id="label-disease1">Disease 1</div>
-                <svg id="walking-path1"></svg>
-            </div>
-            <div class="graph-wrapper">
-                <div class="graph-label" id="label-disease2">Disease 2</div>
-                <svg id="walking-path2"></svg>
-            </div>
-        </div>
-    </div>
-
-    <h3>Summary/Overview</h3>
+    <!-- <h3>Summary/Overview</h3>
     <p>
         We have decided to remain the same group for the final project after Project 3. Since we have already developed numerous ideas regarding the previous dataset, KoreanDB, we wanted to explore something new and more challenging. This led us to research various topics within a larger resource called PhysioNet. We were particularly drawn to this dataset because, at first glance, it presented many opportunities to develop new visualization skills.
     </p>
@@ -112,7 +111,7 @@
     </p>
     <p>
         Last but not least, storytelling itself will be our biggest challenge. In past projects, we focused heavily on developing technical skills. However, for this project, we must go beyond the technical execution and focus on crafting a compelling narrative—because a truly great visualization is built on a strong story. Although we have put much thought into this aspect, we recognize that storytelling is what will make our visualization impactful, and it requires just as much effort as the technical implementation.
-    </p>
+    </p> -->
 
 </body>
 </html>

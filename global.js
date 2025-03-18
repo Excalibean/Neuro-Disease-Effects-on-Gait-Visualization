@@ -79,6 +79,28 @@ let isAnimating1 = false;
 let isAnimating2 = false;
 let index = 0; // Track the current index for animation
 let animationTimeout; // Track the animation timeout for interrupting
+let timerInterval1, timerInterval2;
+
+function startTimer(timerId) {
+    const timerElement = document.getElementById(timerId);
+    let seconds = 0;
+    timerElement.textContent = "00:00";
+    timerElement.style.display = "inline"; // Show the timer
+
+    return setInterval(() => {
+        seconds++;
+        const minutes = Math.floor(seconds / 60);
+        const displaySeconds = seconds % 60;
+        timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(displaySeconds).padStart(2, '0')}`;
+    }, 1000);
+}
+
+function resetTimer(timerId, timerInterval) {
+    clearInterval(timerInterval);
+    const timerElement = document.getElementById(timerId);
+    timerElement.textContent = "00:00";
+    timerElement.style.display = "none"; // Hide the timer
+}
 
 // debounce function to limit the rate of execution of a function
 function debounce(func, wait) {
@@ -88,13 +110,6 @@ function debounce(func, wait) {
         timeout = setTimeout(() => func.apply(this, args), wait);
     };
 }
-
-// document.getElementById('duration-slider').addEventListener('input', debounce(() => {
-//     const file1 = document.getElementById('file1').value;
-//     const file2 = document.getElementById('file2').value;
-//     loadFootprints(file1, file2);  // Reload without animation
-//     updateDurationLabel(document.getElementById('duration-slider').value);
-// }, 250));
 
 function updateDurationLabel(value) {
     document.getElementById('duration-label').textContent = value;
@@ -163,7 +178,7 @@ function createWalkingPath(containerId, data, footColorLeft, footColorRight, dur
         .attr("x", width / 2)
         .attr("y", height + 40)
         .style("text-anchor", "middle")
-        .text(`Distance in ${duration} Seconds`);
+        .text(`Distance (m)`);
 
     // Add y-axis label
     svg.append("text")
@@ -228,6 +243,11 @@ function startAnimation() {
     isAnimating1 = true;
     isAnimating2 = true;
 
+    resetTimer('timer1', timerInterval1); // Reset the timer for the first graph
+    resetTimer('timer2', timerInterval2); // Reset the timer for the second graph
+    timerInterval1 = startTimer('timer1'); // Start the timer for the first graph
+    timerInterval2 = startTimer('timer2'); // Start the timer for the second graph
+
     let index1 = 0;
     let index2 = 0;
     
@@ -235,7 +255,7 @@ function startAnimation() {
 
         if (index1 < data1.length && data1[index1].x_left <= 5 && data1[index1].x_right <= 5) {
             const currentTime1 = data1[index1].time;
-            
+
             // Add ghosting effect for left foot
             d3.select(path1.leftFoot.node().parentNode).append("circle")
                 .attr("r", 4)
@@ -274,6 +294,12 @@ function startAnimation() {
             index1++;
         } else {
             isAnimating1 = false;  // Animation has finished for graph1, set flag to false
+            clearInterval(timerInterval1);
+
+            // Add annotation for the time to reach 5 units
+            const timerElement1 = document.getElementById('timer1');
+            const annotationElement1 = document.getElementById('annotation1');
+            annotationElement1.textContent = `Time to reach 5 meters: ${timerElement1.textContent}`;
         }
         if (index2 < data2.length && data2[index2].x_left <= 5 && data2[index2].x_right <= 5) {
             const currentTime2 = data2[index2].time;
@@ -316,11 +342,17 @@ function startAnimation() {
             index2++;
         } else {
             isAnimating2 = false;  // Animation has finished for graph2, set flag to false
+            clearInterval(timerInterval2);
+
+            // Add annotation for the time to reach 5 units
+            const timerElement2 = document.getElementById('timer2');
+            const annotationElement2 = document.getElementById('annotation2');
+            annotationElement2.textContent = `Time to reach 5 meters: ${timerElement2.textContent}`;
         }
 
         if (isAnimating1 || isAnimating2) {
             setTimeout(updateFootPositions, 1);
-        }
+        } 
 
     }
 
@@ -347,6 +379,9 @@ document.getElementById('file1').addEventListener('change', () => {
     const file1 = document.getElementById('file1').value;
     const file2 = document.getElementById('file2').value;
     loadFootprints(file1, file2);  // Reload without animation
+    resetAnimationState(); // Reset the animation state
+    resetTimer('timer1', timerInterval1); // Reset the timer for the first graph
+    resetTimer('timer2', timerInterval2); // Reset the timer for the second graph
 });
 
 document.getElementById('file2').addEventListener('change', () => {
@@ -354,6 +389,9 @@ document.getElementById('file2').addEventListener('change', () => {
     const file1 = document.getElementById('file1').value;
     const file2 = document.getElementById('file2').value;
     loadFootprints(file1, file2);  // Reload without animation
+    resetAnimationState(); // Reset the animation state
+    resetTimer('timer1', timerInterval1); // Reset the timer for the first graph
+    resetTimer('timer2', timerInterval2); // Reset the timer for the second graph
 });
 
 // Load default data on page load (no animation)
@@ -367,6 +405,14 @@ updateGraphLabels();
 updateNarrativeText('Use the controls below to compare the walking paths of different diseases.');
 
 window.startAnimation = startAnimation;
+
+// Function to reset the animation state
+function resetAnimationState() {
+    isAnimating1 = false;
+    isAnimating2 = false;
+    index = 0;
+    clearTimeout(animationTimeout);
+}
 
 
 //Main Visualization
