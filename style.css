@@ -55,8 +55,8 @@ body {
     flex-direction: column;
     align-items: center;
     position: relative;
-    margin-top: 4em;
-    height: 800px; /* Adjust height to accommodate all four graphs */
+    margin-top: 6em;
+    height: 700px; /* Adjust height to accommodate all four graphs */
 }
 
 .graph-container {
@@ -216,7 +216,7 @@ label {
     font-size: 16px;
     color: #333;
     position: absolute;
-    bottom: 250px; /* Adjust this value to move the prompt higher or lower */
+    bottom: 150px; /* Adjust this value to move the prompt higher or lower */
     left: 50%;
     transform: translateX(-50%);
     text-align: center;

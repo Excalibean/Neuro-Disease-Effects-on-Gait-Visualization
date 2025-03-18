@@ -742,18 +742,18 @@ d3.select("#visualization-container").on("click", function() {
             .style("top", "100px")
             .style("right", "80px")
             .style("transform", "translate(0, 0)");
-        d3.select("#combined-walking-path").style("transform", "translateY(-125px)");
+        d3.select("#combined-walking-path").style("transform", "translateY(-75px)");
         d3.select("#second-walking-path").style("opacity", 1);
         animateWalkingPaths(files.slice(0, 2), svgIds.slice(0, 2), 0, labelTexts.slice(0, 2));
     } else if (step === 4) {
         d3.select("#description").text(descriptions[3]);
-        d3.select("#combined-walking-path").style("transform", "translateY(-225px)");
+        d3.select("#combined-walking-path").style("transform", "translateY(-175px)");
         d3.select("#second-walking-path").style("transform", "translateY(-100px)");
         d3.select("#third-walking-path").style("opacity", 1);
         animateWalkingPaths(files.slice(0, 3), svgIds.slice(0, 3), 0, labelTexts.slice(0, 3));
     } else if (step === 5) {
         d3.select("#description").text(descriptions[4]);
-        d3.select("#combined-walking-path").style("transform", "translateY(-325px)");
+        d3.select("#combined-walking-path").style("transform", "translateY(-275px)");
         d3.select("#second-walking-path").style("transform", "translateY(-200px)");
         d3.select("#third-walking-path").style("transform", "translateY(-100px)");
         d3.select("#fourth-walking-path").style("opacity", 1);
@@ -816,7 +816,7 @@ d3.select("#visualization-container").on("click", function() {
     
         // Shift existing graphs to the left
         d3.select("#combined-walking-path")
-            .style("transform", "translate(-300px, -325px)");
+            .style("transform", "translate(-300px, -275px)");
         d3.select("#second-walking-path")
             .style("transform", "translate(-300px, -200px)")  // Move left and maintain vertical position
             .style("opacity", 1);
