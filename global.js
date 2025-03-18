@@ -75,7 +75,8 @@ d3.select("#file-selector").on("change", function() {
 
 let path1, path2;
 let data1, data2;
-let isAnimating = false;
+let isAnimating1 = false;
+let isAnimating2 = false;
 let index = 0; // Track the current index for animation
 let animationTimeout; // Track the animation timeout for interrupting
 
@@ -104,8 +105,12 @@ function loadFootprints(file1, file2) {
     const duration = document.getElementById('duration-slider').value;
 
     // Stop ongoing animation and reset index immediately
-    if (isAnimating) {
-        isAnimating = false;
+    if (isAnimating1) {
+        isAnimating1 = false;
+        clearTimeout(animationTimeout); // Clear any ongoing animation timeout
+    }
+    if (isAnimating2) {
+        isAnimating2 = false;
         clearTimeout(animationTimeout); // Clear any ongoing animation timeout
     }
     index = 0; // Reset the animation index
@@ -119,25 +124,28 @@ function loadFootprints(file1, file2) {
     }
 
     Promise.all([d3.json(file1), d3.json(file2)]).then(([d1, d2]) => {
-        data1 = d1.filter(d => d.time <= duration);
-        data2 = d2.filter(d => d.time <= duration);
+        // data1 = d1.filter(d => d.time <= 6);
+        // data2 = d2.filter(d => d.time <= 6);
+        data1 = d1;
+        data2 = d2;
 
         // Create the walking path visuals without animation
         path1 = createWalkingPath("#walking-path1", data1, "blue", "green", duration);
         path2 = createWalkingPath("#walking-path2", data2, "blue", "green", duration);
 
         // Reset the animation state to ensure it doesn't play automatically after dropdown change
-        isAnimating = false;
+        isAnimating1 = false;
+        isAnimating2 = false;
     });
 }
 
 function createWalkingPath(containerId, data, footColorLeft, footColorRight, duration) {
     const margin = { top: 20, right: 20, bottom: 50, left: 70 };
-    const width = 400 - margin.left - margin.right;
+    const width = 800 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
 
-    const xScale = d3.scaleLinear().domain([0, duration]).range([0, width]);
-    const yScale = d3.scaleLinear().domain([0, 0.5]).range([height, 0]);
+    const xScale = d3.scaleLinear().domain([0, 5]).range([0, width]);
+    const yScale = d3.scaleLinear().domain([0, 0.2]).range([height, 0]);
 
     const svg = d3.select(containerId)
         .html("")
@@ -215,44 +223,89 @@ function createWalkingPath(containerId, data, footColorLeft, footColorRight, dur
 }
 
 function startAnimation() {
-    if (isAnimating) return; // Prevent starting the animation if it's already running
+    if (isAnimating1 || isAnimating2) return; // Prevent starting the animation if it's already running
 
     if (!data1 || !data2) return;
 
-    isAnimating = true;
+    isAnimating1 = true;
+    isAnimating2 = true;
 
-    let index = 0;
+    let index1 = 0;
+    let index2 = 0;
     function updateFootPositions() {
-        if (index >= Math.min(data1.length, data2.length)) {
-            isAnimating = false;  // Animation has finished, set flag to false
-            return;
+
+        if (index1 < data1.length && data1[index1].x_left <= 5 && data1[index1].x_right <= 5) {
+            const currentTime1 = data1[index1].time;
+
+            // Update positions for first dataset
+            path1.leftFoot.transition()
+                .duration(currentTime1)
+                .attr("cx", path1.xScale(data1[index1].x_left))
+                .attr("cy", path1.yScale(data1[index1].y_left));
+            path1.rightFoot.transition()
+                .duration(currentTime1)
+                .attr("cx", path1.xScale(data1[index1].x_right))
+                .attr("cy", path1.yScale(data1[index1].y_right));
+
+            index1++;
+        } else {
+            isAnimating1 = false;  // Animation has finished for graph1, set flag to false
+        }
+        if (index2 < data2.length && data2[index2].x_left <= 5 && data2[index2].x_right <= 5) {
+            const currentTime2 = data2[index2].time;
+
+            // Update positions for second dataset
+            path2.leftFoot.transition()
+                .duration(currentTime2)
+                .attr("cx", path2.xScale(data2[index2].x_left))
+                .attr("cy", path2.yScale(data2[index2].y_left));
+            path2.rightFoot.transition()
+                .duration(currentTime2)
+                .attr("cx", path2.xScale(data2[index2].x_right))
+                .attr("cy", path2.yScale(data2[index2].y_right));
+
+            index2++;
+        } else {
+            isAnimating2 = false;  // Animation has finished for graph2, set flag to false
         }
 
-        const currentTime1 = data1[index].time;
-        const currentTime2 = data2[index].time;
+        if (isAnimating1 || isAnimating2) {
+            setTimeout(updateFootPositions, 1);
+        }
+        // if (data1[index].x_left > 5 && data1[index].x_right > 5) {
+        //     isAnimating1 = false;  // Animation has finished, set flag to false
+        //     return;
+        // }
+        // if (data2[index].x_left > 5 && data2[index].x_right > 5) {
+        //     isAnimating2 = false;  // Animation has finished, set flag to false
+        //     return;
+        // }
 
-        // Update positions for first dataset
-        path1.leftFoot.transition()
-            .duration(currentTime1)
-            .attr("cx", path1.xScale(data1[index].x_left))
-            .attr("cy", path1.yScale(data1[index].y_left));
-        path1.rightFoot.transition()
-            .duration(currentTime1)
-            .attr("cx", path1.xScale(data1[index].x_right))
-            .attr("cy", path1.yScale(data1[index].y_right));
+        // const currentTime1 = data1[index].time;
+        // const currentTime2 = data2[index].time;
 
-        // Update positions for second dataset
-        path2.leftFoot.transition()
-            .duration(currentTime2)
-            .attr("cx", path2.xScale(data2[index].x_left))
-            .attr("cy", path2.yScale(data2[index].y_left));
-        path2.rightFoot.transition()
-            .duration(currentTime2)
-            .attr("cx", path2.xScale(data2[index].x_right))
-            .attr("cy", path2.yScale(data2[index].y_right));
+        // // Update positions for first dataset
+        // path1.leftFoot.transition()
+        //     .duration(currentTime1)
+        //     .attr("cx", path1.xScale(data1[index].x_left))
+        //     .attr("cy", path1.yScale(data1[index].y_left));
+        // path1.rightFoot.transition()
+        //     .duration(currentTime1)
+        //     .attr("cx", path1.xScale(data1[index].x_right))
+        //     .attr("cy", path1.yScale(data1[index].y_right));
 
-        index++;
-        animationTimeout = setTimeout(updateFootPositions, 1);
+        // // Update positions for second dataset
+        // path2.leftFoot.transition()
+        //     .duration(currentTime2)
+        //     .attr("cx", path2.xScale(data2[index].x_left))
+        //     .attr("cy", path2.yScale(data2[index].y_left));
+        // path2.rightFoot.transition()
+        //     .duration(currentTime2)
+        //     .attr("cx", path2.xScale(data2[index].x_right))
+        //     .attr("cy", path2.yScale(data2[index].y_right));
+
+        // index++;
+        // animationTimeout = setTimeout(updateFootPositions, 1);
     }
 
     updateFootPositions();
@@ -288,11 +341,11 @@ document.getElementById('file2').addEventListener('change', () => {
 });
 
 // Load default data on page load (no animation)
-loadFootprints("./gait_coordinates/control1_coord.json", "./gait_coordinates/park1_coord.json");
+loadFootprints("./gait_coordinates/control9_mid.json", "./gait_coordinates/control12_high.json");
 
 // Set dropdown values to match loaded files
-document.getElementById('file1').value = './gait_coordinates/control1_coord.json';
-document.getElementById('file2').value = './gait_coordinates/park1_coord.json';
+document.getElementById('file1').value = './gait_coordinates/control9_mid.json';
+document.getElementById('file2').value = './gait_coordinates/control12_high.json';
 
 updateGraphLabels();
 updateNarrativeText('Use the controls below to compare the walking paths of different diseases.');
