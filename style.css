@@ -234,9 +234,9 @@ label {
 
 /* Alzheimer's styles */
 .foot.alzheimers,
-.foot.alzheimers-early,
-.foot.alzheimers-mid,
-.foot.alzheimers-advanced {
+.foot.als-early,
+.foot.als-mid,
+.foot.als-advanced {
     fill: #D55E00; /* Vermilion */
 }
 

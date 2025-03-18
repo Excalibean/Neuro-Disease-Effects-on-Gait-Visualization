@@ -438,17 +438,17 @@ function animateWalkingPaths(files, svgIds, yOffset = 0, labelTexts = []) {
             else if (labelText === "Huntington's - Advanced Stage") {
                 footClass = "huntingtons-advanced";
             }
-            else if (labelText === "Alzheimer's Disease") {
-                footClass = "alzheimers";
+            else if (labelText === "Amyotrophic Lateral Sclerosis (ALS)") {
+                footClass = "als";
             }
-            else if (labelText === "Alzheimer's - Early Stage") {
-                footClass = "alzheimers-early";
+            else if (labelText === "ALS - Early Stage") {
+                footClass = "als-early";
             }
-            else if (labelText === "Alzheimer's - Mid Stage") {
-                footClass = "alzheimers-mid";
+            else if (labelText === "ALS - Mid Stage") {
+                footClass = "als-mid";
             }
-            else if (labelText === "Alzheimer's - Advanced Stage") {
-                footClass = "alzheimers-advanced";
+            else if (labelText === "ALS - Advanced Stage") {
+                footClass = "als-advanced";
             }
 
             // Create circles for each foot
@@ -516,7 +516,7 @@ const descriptions = [
     "Changes in Gait take many variations whether it's simply walking slower, lack of an arm swing on a single side, shuffling, a forward lean causing quicker steps, and more.",
     "For example, Parkingson's has a gait named after it.\n Parkingsonian Gait is characterized by slow, little, shuffling steps with the body bent forward.",
     "But there's no cut and dry way to distinguish which disease is being developed. Even within Parkingson's Disease, there are differences in Gait regardless of stage as seen between the mid and advanced stages.",
-    "The same can be said for other neurological disorders such as Alzheimer's Disease.",
+    "The same can be said for other neurological disorders such as Amyotrophic Lateral Sclerosis (ALS).",
     "Therefore, Gait analysis can be a window to a person's overall health and can be used to detect early signs of neurological disorders. \nThis is alongside other symtpoms such as: \nmemory loss,  behavioral changes, and speech/cognitive impairments.",
     "Catching these early signs can lead to a huge difference with early intervention and treatment to slow neurodegeneration within loved ones."
 ];
@@ -550,13 +550,13 @@ const labelTexts = [
     "Healthy Person",
     "Parkinson's Disease",
     "Huntington's Disease",
-    "Alzheimer's Disease",
+    "Amyotrophic Lateral Sclerosis (ALS)",
     "Parkinson's - Early Stage",
     "Parkinson's - Mid Stage",
     "Parkinson's - Advanced Stage",
-    "Alzheimer's - Early Stage",
-    "Alzheimer's - Mid Stage",
-    "Alzheimer's - Advanced Stage",
+    "ALS - Early Stage",
+    "ALS - Mid Stage",
+    "ALS - Advanced Stage",
     "Healthy Person - Slow Pace",
     "Healthy Person - Normal Pace",
     "Healthy Person - Fast Pace",
@@ -631,26 +631,26 @@ d3.select("#visualization-container").on("click", function() {
         d3.select("#description").text(descriptions[6]);
     }  else if (step === 8) { 
         // Reset graphs and change to alzheimer's
-        d3.select("#second-walking-path") // Alz's low
+        d3.select("#second-walking-path") // Als's low
             .style("transform", "translateY(-200px)")
             .style("opacity", 1);
         
-        d3.select("#third-walking-path") // Alz's mid stage
+        d3.select("#third-walking-path") // Als's mid stage
             .style("transform", "translateY(-100px)") 
             .style("opacity", 1);
         
-        d3.select("#fourth-walking-path") // Alz's advanced stage
+        d3.select("#fourth-walking-path") // Als's advanced stage
             .style("transform", "translateY(0px)") 
             .style("opacity", 1);
         
-        // Use the Alz's disease files
-        const alzFiles = [files[6], files[7], files[8]]; // low, mid, and advanced stages
-        const alzLabels = [labelTexts[7], labelTexts[8], labelTexts[9]]; // Labels for these stages
+        // Use the Als's disease files
+        const alsFiles = [files[6], files[7], files[8]]; // low, mid, and advanced stages
+        const alsLabels = [labelTexts[7], labelTexts[8], labelTexts[9]]; // Labels for these stages
         
         // Animate the three Huntington's cases with their updated positions
-        animateWalkingPaths([alzFiles[0]], ["#second-walking-path"], 0, [alzLabels[0]]);
-        animateWalkingPaths([alzFiles[1]], ["#third-walking-path"], 0, [alzLabels[1]]);
-        animateWalkingPaths([alzFiles[2]], ["#fourth-walking-path"], 0, [alzLabels[2]]);
+        animateWalkingPaths([alsFiles[0]], ["#second-walking-path"], 0, [alsLabels[0]]);
+        animateWalkingPaths([alsFiles[1]], ["#third-walking-path"], 0, [alsLabels[1]]);
+        animateWalkingPaths([alsFiles[2]], ["#fourth-walking-path"], 0, [alsLabels[2]]);
         d3.select("#description").text(descriptions[7]);
     } else if (step === 9) {
         // Final comparison view - comprehensive comparison
