@@ -41,58 +41,55 @@
                 <div>
                     <label for="file1">Select Disease 1:</label>
                     <select id="file1">
-                        <option value="./gait_coordinates/control14_low.json">Control (Younger)</option>
-                        <option value="./gait_coordinates/control9_mid.json">Control (Middle)</option>
-                        <option value="./gait_coordinates/control12_high.json">Control (Old)</option>
-                        <option value="./gait_coordinates/park2_low.json">Parkinson's (Least Severe)</option>
-                        <option value="./gait_coordinates/park11_mid.json">Parkinson's (Median)</option>
-                        <option value="./gait_coordinates/park1_high.json">Parkinson's (Most Severe)</option>
-                        <option value="./gait_coordinates/als1_low.json">ALS (Earliest)</option>
-                        <option value="./gait_coordinates/als3_mid.json">ALS (Median)</option>
-                        <option value="./gait_coordinates/als9_high.json">ALS (Later)</option>
-                        <option value="./gait_coordinates/hunt9_low.json">Huntington's (Least Severe)</option>
-                        <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Median)</option>
-                        <option value="./gait_coordinates/hunt19_high.json">Huntington's (Severe)</option>
+                        <option value="./gait_coordinates/control14_low.json">Control (Younger Age)</option>
+                        <option value="./gait_coordinates/control9_mid.json">Control (Middle Age)</option>
+                        <option value="./gait_coordinates/control12_high.json">Control (Older Age)</option>
+                        <option value="./gait_coordinates/park2_low.json">Parkinson's (Early Stage)</option>
+                        <option value="./gait_coordinates/park11_mid.json">Parkinson's (Middle Stage)</option>
+                        <option value="./gait_coordinates/park1_high.json">Parkinson's (Advanced Stage)</option>
+                        <option value="./gait_coordinates/als1_low.json">ALS (Early Stage)</option>
+                        <option value="./gait_coordinates/als3_mid.json">ALS (Middle Stage)</option>
+                        <option value="./gait_coordinates/als9_high.json">ALS (Advanced Stage)</option>
+                        <option value="./gait_coordinates/hunt9_low.json">Huntington's (Early Stage)</option>
+                        <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Middle Stage)</option>
+                        <option value="./gait_coordinates/hunt19_high.json">Huntington's (Advanced Stage)</option>
                     </select>
 
                     <label for="file2">Select Disease 2:</label>
                     <select id="file2">
-                        <option value="./gait_coordinates/control14_low.json">Control (Younger)</option>
-                        <option value="./gait_coordinates/control9_mid.json">Control (Middle)</option>
-                        <option value="./gait_coordinates/control12_high.json">Control (Old)</option>
-                        <option value="./gait_coordinates/park2_low.json">Parkinson's (Least Severe)</option>
-                        <option value="./gait_coordinates/park11_mid.json">Parkinson's (Median)</option>
-                        <option value="./gait_coordinates/park1_high.json">Parkinson's (Most Severe)</option>
-                        <option value="./gait_coordinates/als1_low.json">ALS (Earliest)</option>
-                        <option value="./gait_coordinates/als3_mid.json">ALS (Median)</option>
-                        <option value="./gait_coordinates/als9_high.json">ALS (Later)</option>
-                        <option value="./gait_coordinates/hunt9_low.json">Huntington's (Least Severe)</option>
-                        <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Median)</option>
-                        <option value="./gait_coordinates/hunt19_high.json">Huntington's (Severe)</option>
+                        <option value="./gait_coordinates/control14_low.json">Control (Younger Age)</option>
+                        <option value="./gait_coordinates/control9_mid.json">Control (Middle Age)</option>
+                        <option value="./gait_coordinates/control12_high.json">Control (Older Age)</option>
+                        <option value="./gait_coordinates/park2_low.json">Parkinson's (Early Stage)</option>
+                        <option value="./gait_coordinates/park11_mid.json">Parkinson's (Middle Stage)</option>
+                        <option value="./gait_coordinates/park1_high.json">Parkinson's (Advanced Stage)</option>
+                        <option value="./gait_coordinates/als1_low.json">ALS (Early Stage)</option>
+                        <option value="./gait_coordinates/als3_mid.json">ALS (Middle Stage)</option>
+                        <option value="./gait_coordinates/als9_high.json">ALS (Advanced Stage)</option>
+                        <option value="./gait_coordinates/hunt9_low.json">Huntington's (Early Stage)</option>
+                        <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Middle Stage)</option>
+                        <option value="./gait_coordinates/hunt19_high.json">Huntington's (Advanced Stage)</option>
                     </select>
-
-            <!-- <div>
-                <label for="duration-slider">Walking Duration:</label>
-                <input type="range" id="duration-slider" min="5" max="500" value="20" step="5" oninput="updateDurationLabel(this.value)">
-                <span id="duration-label">20</span> seconds
-            </div> -->
 
                     <button onclick="startAnimation()">Animate</button>
                 </div>
                 <div id="walking-path-container">
                     <div class="graph-wrapper">
                         <div class="graph-label" id="label-disease1">Disease 1</div>
-
-            <!-- <div>
-                <label for="duration-slider">Walking Duration:</label>
-                <input type="range" id="duration-slider" min="5" max="500" value="20" step="5" oninput="updateDurationLabel(this.value)">
-                <span id="duration-label">20</span> seconds
-            </div> -->
-                        <svg id="walking-path1"></svg>
+                        <span id="timer1" class="timer">0:00</span>
+                        <div class="graph-and-annotation">
+                            <svg id="walking-path1"></svg>
+                            <div id="annotation1" class="annotation"></div>
+                        </div>
+                        
                     </div>
                     <div class="graph-wrapper">
                         <div class="graph-label" id="label-disease2">Disease 2</div>
-                        <svg id="walking-path2"></svg>
+                        <span id="timer2" class="timer">0:00</span>
+                        <div class="graph-and-annotation">
+                            <svg id="walking-path2"></svg>
+                            <div id="annotation2" class="annotation"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -108,7 +105,7 @@
                     The color-coded stride paths are provided to help visualize gate patterns along with trails.
                 </p>
                 <p>
-                    For an extreme example of a large difference, try comparing 'Parkingson's (Median)' with a Healthy individual.
+                    For an extreme example of a large difference, try comparing 'Parkingson's (Middle Stage)' with a Healthy individual.
                     It's the most extreme case we have a 'short shuffling' gait pattern. Other irregularities in strides can be spotted among 
                     our other selections as well. See if you can spot them!
                 </p>

@@ -408,16 +408,3 @@ label {
     color: black;
     line-height: 1.6;
 }
-/* Media queries for responsiveness */
-/* @media (max-width: 940px) {
-    #walking-path-container {
-        flex-direction: column; 
-    }
-    #walking-path-container .graph-wrapper {
-        width: 100%; 
-    }
-    #walking-path-container svg {
-        height: 300px; 
-        max-width: 100%; 
-    }
-} */
