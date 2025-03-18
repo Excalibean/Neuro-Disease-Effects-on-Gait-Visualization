@@ -10,8 +10,6 @@
 </head>
 <body>
     <h1>Neurological Diseases and Their Effects on Gait: The Hidden Language of Moving</h1>
-    <!-- alt heading? -->
-    <!-- Discover the hidden language of movement: How neurological diseases like Parkinson's, Huntington's, and ALS transform our gait. -->
 
     <div id="description-container">
         <p id="description">What is a Gait?</p>
@@ -24,7 +22,7 @@
         <svg id="fourth-walking-path" style="opacity: 0;"></svg>
         <div id="scroll-prompt">
             <span class="arrow left-arrow">&#9654;</span>
-            Scroll Down to Explore More
+            Scroll Down for a Closer Look
             <span class="arrow right-arrow">&#9654;</span>
         </div>
     </div>
@@ -35,85 +33,123 @@
         <p id="narrative-text">Use the controls below to compare the walking paths of different diseases.</p>
     </div>
 
-    <div id="walking-path-comparison-container">
-        <h2>Walking Path Comparison</h2>
-        <div>
-            <label for="file1">Select Disease 1:</label>
-            <select id="file1">
-                <option value="./gait_coordinates/control14_low.json">Control (Younger)</option>
-                <option value="./gait_coordinates/control9_mid.json">Control (Middle)</option>
-                <option value="./gait_coordinates/control12_high.json">Control (Old)</option>
-                <option value="./gait_coordinates/park2_low.json">Parkinson's (Least Severe)</option>
-                <option value="./gait_coordinates/park11_mid.json">Parkinson's (Median)</option>
-                <option value="./gait_coordinates/park1_high.json">Parkinson's (Most Severe)</option>
-                <option value="./gait_coordinates/als1_low.json">ALS (Earliest)</option>
-                <option value="./gait_coordinates/als3_mid.json">ALS (Median)</option>
-                <option value="./gait_coordinates/als9_high.json">ALS (Later)</option>
-                <option value="./gait_coordinates/hunt9_low.json">Huntington's (Least Severe)</option>
-                <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Median)</option>
-                <option value="./gait_coordinates/hunt19_high.json">Huntington's (Severe)</option>
-            </select>
+    <!-- Two-column layout for Walking Path Comparison and explanatory text -->
+    <div class="two-column-layout">
+        <div class="column left-column">
+            <div id="walking-path-comparison-container">
+                <h2>Walking Path Comparison</h2>
+                <div>
+                    <label for="file1">Select Disease 1:</label>
+                    <select id="file1">
+                        <option value="./gait_coordinates/control14_low.json">Control (Younger)</option>
+                        <option value="./gait_coordinates/control9_mid.json">Control (Middle)</option>
+                        <option value="./gait_coordinates/control12_high.json">Control (Old)</option>
+                        <option value="./gait_coordinates/park2_low.json">Parkinson's (Least Severe)</option>
+                        <option value="./gait_coordinates/park11_mid.json">Parkinson's (Median)</option>
+                        <option value="./gait_coordinates/park1_high.json">Parkinson's (Most Severe)</option>
+                        <option value="./gait_coordinates/als1_low.json">ALS (Earliest)</option>
+                        <option value="./gait_coordinates/als3_mid.json">ALS (Median)</option>
+                        <option value="./gait_coordinates/als9_high.json">ALS (Later)</option>
+                        <option value="./gait_coordinates/hunt9_low.json">Huntington's (Least Severe)</option>
+                        <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Median)</option>
+                        <option value="./gait_coordinates/hunt19_high.json">Huntington's (Severe)</option>
+                    </select>
 
-            <label for="file2">Select Disease 2:</label>
-            <select id="file2">
-                <option value="./gait_coordinates/control14_low.json">Control (Younger)</option>
-                <option value="./gait_coordinates/control9_mid.json">Control (Middle)</option>
-                <option value="./gait_coordinates/control12_high.json">Control (Old)</option>
-                <option value="./gait_coordinates/park2_low.json">Parkinson's (Least Severe)</option>
-                <option value="./gait_coordinates/park11_mid.json">Parkinson's (Median)</option>
-                <option value="./gait_coordinates/park1_high.json">Parkinson's (Most Severe)</option>
-                <option value="./gait_coordinates/als1_low.json">ALS (Earliest)</option>
-                <option value="./gait_coordinates/als3_mid.json">ALS (Median)</option>
-                <option value="./gait_coordinates/als9_high.json">ALS (Later)</option>
-                <option value="./gait_coordinates/hunt9_low.json">Huntington's (Least Severe)</option>
-                <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Median)</option>
-                <option value="./gait_coordinates/hunt19_high.json">Huntington's (Severe)</option>
-            </select>
+                    <label for="file2">Select Disease 2:</label>
+                    <select id="file2">
+                        <option value="./gait_coordinates/control14_low.json">Control (Younger)</option>
+                        <option value="./gait_coordinates/control9_mid.json">Control (Middle)</option>
+                        <option value="./gait_coordinates/control12_high.json">Control (Old)</option>
+                        <option value="./gait_coordinates/park2_low.json">Parkinson's (Least Severe)</option>
+                        <option value="./gait_coordinates/park11_mid.json">Parkinson's (Median)</option>
+                        <option value="./gait_coordinates/park1_high.json">Parkinson's (Most Severe)</option>
+                        <option value="./gait_coordinates/als1_low.json">ALS (Earliest)</option>
+                        <option value="./gait_coordinates/als3_mid.json">ALS (Median)</option>
+                        <option value="./gait_coordinates/als9_high.json">ALS (Later)</option>
+                        <option value="./gait_coordinates/hunt9_low.json">Huntington's (Least Severe)</option>
+                        <option value="./gait_coordinates/hunt1_mid.json">Huntington's (Median)</option>
+                        <option value="./gait_coordinates/hunt19_high.json">Huntington's (Severe)</option>
+                    </select>
 
             <!-- <div>
                 <label for="duration-slider">Walking Duration:</label>
                 <input type="range" id="duration-slider" min="5" max="500" value="20" step="5" oninput="updateDurationLabel(this.value)">
                 <span id="duration-label">20</span> seconds
             </div> -->
-        
-            <button onclick="startAnimation()">Animate</button>
-        </div>
-        <div id="walking-path-container">
-            <div class="graph-wrapper">
-                <div class="graph-label" id="label-disease1">Disease 1</div>
-                <svg id="walking-path1"></svg>
+
+                    <button onclick="startAnimation()">Animate</button>
+                </div>
+                <div id="walking-path-container">
+                    <div class="graph-wrapper">
+                        <div class="graph-label" id="label-disease1">Disease 1</div>
+
+            <!-- <div>
+                <label for="duration-slider">Walking Duration:</label>
+                <input type="range" id="duration-slider" min="5" max="500" value="20" step="5" oninput="updateDurationLabel(this.value)">
+                <span id="duration-label">20</span> seconds
+            </div> -->
+                        <svg id="walking-path1"></svg>
+                    </div>
+                    <div class="graph-wrapper">
+                        <div class="graph-label" id="label-disease2">Disease 2</div>
+                        <svg id="walking-path2"></svg>
+                    </div>
+                </div>
             </div>
-            <div class="graph-wrapper">
-                <div class="graph-label" id="label-disease2">Disease 2</div>
-                <svg id="walking-path2"></svg>
+        </div>
+        <div class="column right-column">
+            <div class="explanation-text">
+                <h3>A Closer Look at Walking Stride Patterns</h3>
+                <p>
+                    This visualization compares the walking paths of individuals with different neurological conditions.
+                    This graph shows the stride of each step, highlighting the differences in gait patterns between conditions and severities.
+                </p>
+                <p>
+                    The color-coded stride paths are provided to help visualize gate patterns along with trails.
+                </p>
+                <p>
+                    For an extreme example of a large difference, try comparing 'Parkingson's (Median)' with a Healthy individual.
+                    It's the most extreme case we have a 'short shuffling' gait pattern. Other irregularities in strides can be spotted among 
+                    our other selections as well. See if you can spot them!
+                </p>
             </div>
         </div>
     </div>
 
-    <div id="gait-animation-container">
-        <select id="file-selector">
-            <option value="control1.json">Control (Healthy)</option>
-            <option value="park1.json">Parkinson's Disease</option>
-            <option value="als1.json">Alzheimer's Disease</option>
-            <option value="hunt1.json">Huntington's Disease</option>
-        </select>
-        <svg id="gait-animation"></svg>
-        <div id="gait-animation-title">Top-Down View of Walking Strides</div>
+    <!-- Two-column layout for Gait Animation and explanatory text (reversed) -->
+    <div class="two-column-layout reversed">
+        <div class="column left-column">
+            <div class="explanation-text">
+                <h3>Gait Cycle Visualization</h3>
+                <p>
+                    The animation on the right shows a top-down view of walking strides seen above. 
+                    This perspective helps visualize the timing and rhythm of steps to spot rhythmic irregularities.
+                </p>
+                <p>
+                    The transparent reference stride allows for direct comparison between different cases, 
+                    making subtle differences in gait patterns more apparent.
+                </p>
+                <p>
+                    Select different conditions from the dropdown to observe how neurological diseases affect the timing, 
+                    symmetry, and consistency of the gait cycle. Note how healthy individuals maintain consistent timing 
+                    between steps, while those with neurological conditions often show irregularities beyond just having a 
+                    different stride timing.
+                </p>
+            </div>
+        </div>
+        <div class="column right-column">
+            <div id="gait-animation-container">
+                <select id="file-selector">
+                    <option value="control1.json">Control (Healthy)</option>
+                    <option value="park1.json">Parkinson's Disease</option>
+                    <option value="als1.json">Amyotrophic Lateral Sclerosis (ALS)</option>
+                    <option value="hunt1.json">Huntington's Disease</option>
+                </select>
+                <svg id="gait-animation"></svg>
+                <div id="gait-animation-title">Top-Down View of Walking Strides</div>
+            </div>
+        </div>
     </div>
-    
-    <h3>Summary/Overview</h3>
-    <p>
-        We have decided to remain the same group for the final project after Project 3. Since we have already developed numerous ideas regarding the previous dataset, KoreanDB, we wanted to explore something new and more challenging. This led us to research various topics within a larger resource called PhysioNet. We were particularly drawn to this dataset because, at first glance, it presented many opportunities to develop new visualization skills.
-    </p>
-    <p>
-        So far, we have completed several key tasks. Firstly, we brainstormed ideas that interest us and could effectively convey the essence of our final project—telling a compelling story about how and why people with certain diseases struggle with gait abnormalities. Secondly, since this is a challenging dataset, we familiarized ourselves with the available tools, explored the different data types in the files, and gained a general understanding of how the variables interact. This step was moderately difficult because the dataset was formatted in a way that differed from the usual CSV files we are accustomed to, requiring us to revisit and refine our file manipulation skills.
-    </p>
-    <p>
-        We still need to finalize the exact direction of our project, which presents several challenges. One of the biggest difficulties is determining the most effective way to convey the physical disparities between different disease groups. An integral part of this challenge is incorporating animations on our website—whether through smooth transitions or fully interactive motion graphics. We have never created animations before, so we are unsure whether they will enhance or reduce the clarity of our visualization. While animations can improve engagement, they must serve the story—if they fail to do so, they become distracting rather than useful.
-    </p>
-    <p>
-        Last but not least, storytelling itself will be our biggest challenge. In past projects, we focused heavily on developing technical skills. However, for this project, we must go beyond the technical execution and focus on crafting a compelling narrative—because a truly great visualization is built on a strong story. Although we have put much thought into this aspect, we recognize that storytelling is what will make our visualization impactful, and it requires just as much effort as the technical implementation.
-    </p>
 
 </body>
 </html>

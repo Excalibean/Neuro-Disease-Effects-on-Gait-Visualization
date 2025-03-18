@@ -2,7 +2,56 @@ body {
     font-family: Arial, sans-serif;
     margin: 0.5em;
     padding: 0.5em;
-    background-color: #f0f0f0;
+    background-color: #e6e6e6;
+}
+
+/* Two-column layout */
+.two-column-layout {
+    display: flex;
+    margin: 20px 0;
+}
+
+/* Change flex proportions - give visuals more space than text */
+.column.left-column {
+    flex: 3; /* Visual column gets 3 parts of the available space */
+}
+
+.column.right-column {
+    flex: 2; /* Text column gets 2 parts of the available space */
+}
+
+/* For the second section where the order is reversed */
+.two-column-layout.reversed .left-column {
+    order: 1;
+}
+
+.two-column-layout.reversed .right-column {
+    order: 2;
+}
+
+/* Make the explanation text container fit better */
+.explanation-text {
+    padding: 15px; /* Reduce padding */
+    background-color: rgb(238, 238, 238);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    height: auto; /* Let it adjust to content height */
+    min-height: 500px; /* Set minimum height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.explanation-text h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+/* Make the text a bit more compact */
+.explanation-text p {
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-size: 0.95em; /* Slightly smaller font */
 }
 
 #tooltip {
@@ -49,6 +98,7 @@ body {
     animation: pulse 1s ease-in-out;
 }
 
+/* Main viz styles */
 #visualization-container {
     cursor: pointer; /* Make the cursor a pointer to indicate it's clickable */
     display: flex;
@@ -162,6 +212,7 @@ svg#eighth-walking-path {
     top: 300px;
 }
 
+/* Gait top-down view animation styles */
 #gait-animation-container {
     border: 2px solid black;
     padding: 10px;
@@ -170,6 +221,7 @@ svg#eighth-walking-path {
     align-items: center;
     max-width: 500px;
     max-height: 500px;
+    margin: 0 auto
 }
 
 svg#gait-animation {
@@ -238,7 +290,7 @@ label {
     transform: rotate(90deg); /* Rotate to point downwards */
 }
 
-/* Styles for the dots in the graphs */
+/* Styles for the dots in the graphs (main viz) */
 .foot {
     stroke: black; /* Black outline */
     stroke-width: 0.2px;
@@ -272,13 +324,14 @@ label {
     fill: #D55E00; /* Vermilion */
 }
 
+/*Walking Path graph styles*/
 #walking-path-comparison-container {
     border: 2px solid black;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 900px;
+    max-width: 100%;
     margin: 20px auto;
 }
 
