@@ -50,10 +50,6 @@
         <div>
             <label for="file1">Select Disease 1:</label>
             <select id="file1">
-                <option value="./gait_coordinates/control1_coord.json">Control (Healthy)</option>
-                <option value="./gait_coordinates/park1_coord.json">Parkinson's Disease</option>
-                <option value="./gait_coordinates/als1_coord.json">Huntington's Disease</option>
-                <option value="./gait_coordinates/hunt1_coord.json">ALS Disease</option>
                 <option value="./gait_coordinates/control14_low.json">Control (Younger)</option>
                 <option value="./gait_coordinates/control9_mid.json">Control (Middle)</option>
                 <option value="./gait_coordinates/control12_high.json">Control (Old)</option>
@@ -70,10 +66,6 @@
 
             <label for="file2">Select Disease 2:</label>
             <select id="file2">
-                <option value="./gait_coordinates/control1_coord.json">Control (Healthy)</option>
-                <option value="./gait_coordinates/park1_coord.json">Parkinson's Disease</option>
-                <option value="./gait_coordinates/als1_coord.json">Huntington's Disease</option>
-                <option value="./gait_coordinates/hunt1_coord.json">ALS Disease</option>
                 <option value="./gait_coordinates/control14_low.json">Control (Younger)</option>
                 <option value="./gait_coordinates/control9_mid.json">Control (Middle)</option>
                 <option value="./gait_coordinates/control12_high.json">Control (Old)</option>
@@ -88,11 +80,11 @@
                 <option value="./gait_coordinates/hunt19_high.json">Huntington's (Severe)</option>
             </select>
 
-            <div>
+            <!-- <div>
                 <label for="duration-slider">Walking Duration:</label>
                 <input type="range" id="duration-slider" min="5" max="500" value="20" step="5" oninput="updateDurationLabel(this.value)">
                 <span id="duration-label">20</span> seconds
-            </div>
+            </div> -->
         
             <button onclick="startAnimation()">Animate</button>
         </div>

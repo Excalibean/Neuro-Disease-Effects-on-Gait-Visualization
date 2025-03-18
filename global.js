@@ -89,12 +89,12 @@ function debounce(func, wait) {
     };
 }
 
-document.getElementById('duration-slider').addEventListener('input', debounce(() => {
-    const file1 = document.getElementById('file1').value;
-    const file2 = document.getElementById('file2').value;
-    loadFootprints(file1, file2);  // Reload without animation
-    updateDurationLabel(document.getElementById('duration-slider').value);
-}, 250));
+// document.getElementById('duration-slider').addEventListener('input', debounce(() => {
+//     const file1 = document.getElementById('file1').value;
+//     const file2 = document.getElementById('file2').value;
+//     loadFootprints(file1, file2);  // Reload without animation
+//     updateDurationLabel(document.getElementById('duration-slider').value);
+// }, 250));
 
 function updateDurationLabel(value) {
     document.getElementById('duration-label').textContent = value;
@@ -102,7 +102,7 @@ function updateDurationLabel(value) {
 window.updateDurationLabel = updateDurationLabel;
 
 function loadFootprints(file1, file2) {
-    const duration = document.getElementById('duration-slider').value;
+    const duration = 20;
 
     // Stop ongoing animation and reset index immediately
     if (isAnimating1) {
@@ -124,8 +124,6 @@ function loadFootprints(file1, file2) {
     }
 
     Promise.all([d3.json(file1), d3.json(file2)]).then(([d1, d2]) => {
-        // data1 = d1.filter(d => d.time <= 6);
-        // data2 = d2.filter(d => d.time <= 6);
         data1 = d1;
         data2 = d2;
 
@@ -232,16 +230,42 @@ function startAnimation() {
 
     let index1 = 0;
     let index2 = 0;
+    
     function updateFootPositions() {
 
         if (index1 < data1.length && data1[index1].x_left <= 5 && data1[index1].x_right <= 5) {
             const currentTime1 = data1[index1].time;
+            
+            // Add ghosting effect for left foot
+            d3.select(path1.leftFoot.node().parentNode).append("circle")
+                .attr("r", 4)
+                .attr("fill", "blue") // Color for the left foot
+                .attr("cx", path1.xScale(data1[index1].x_left))
+                .attr("cy", path1.yScale(data1[index1].y_left))
+                .style("opacity", 1)
+                .transition()
+                .duration(1000) // Duration for the ghost to fade out
+                .style("opacity", 0)
+                .remove();
+
+            // Add ghosting effect for right foot
+            d3.select(path1.rightFoot.node().parentNode).append("circle")
+                .attr("r", 4)
+                .attr("fill", "green") // Color for the right foot
+                .attr("cx", path1.xScale(data1[index1].x_right))
+                .attr("cy", path1.yScale(data1[index1].y_right))
+                .style("opacity", 1)
+                .transition()
+                .duration(1000) // Duration for the ghost to fade out
+                .style("opacity", 0)
+                .remove();
 
             // Update positions for first dataset
             path1.leftFoot.transition()
                 .duration(currentTime1)
                 .attr("cx", path1.xScale(data1[index1].x_left))
                 .attr("cy", path1.yScale(data1[index1].y_left));
+
             path1.rightFoot.transition()
                 .duration(currentTime1)
                 .attr("cx", path1.xScale(data1[index1].x_right))
@@ -254,11 +278,36 @@ function startAnimation() {
         if (index2 < data2.length && data2[index2].x_left <= 5 && data2[index2].x_right <= 5) {
             const currentTime2 = data2[index2].time;
 
+            // Add ghosting effect for left foot
+            d3.select(path2.leftFoot.node().parentNode).append("circle")
+                .attr("r", 4)
+                .attr("fill", "blue") // Color for the left foot
+                .attr("cx", path2.xScale(data2[index2].x_left))
+                .attr("cy", path2.yScale(data2[index2].y_left))
+                .style("opacity", 1)
+                .transition()
+                .duration(1000) // Duration for the ghost to fade out
+                .style("opacity", 0)
+                .remove();
+
+            // Add ghosting effect for right foot
+            d3.select(path2.rightFoot.node().parentNode).append("circle")
+                .attr("r", 4)
+                .attr("fill", "green") // Color for the right foot
+                .attr("cx", path2.xScale(data2[index2].x_right))
+                .attr("cy", path2.yScale(data2[index2].y_right))
+                .style("opacity", 1)
+                .transition()
+                .duration(1000) // Duration for the ghost to fade out
+                .style("opacity", 0)
+                .remove();
+
             // Update positions for second dataset
             path2.leftFoot.transition()
                 .duration(currentTime2)
                 .attr("cx", path2.xScale(data2[index2].x_left))
                 .attr("cy", path2.yScale(data2[index2].y_left));
+
             path2.rightFoot.transition()
                 .duration(currentTime2)
                 .attr("cx", path2.xScale(data2[index2].x_right))
@@ -272,40 +321,7 @@ function startAnimation() {
         if (isAnimating1 || isAnimating2) {
             setTimeout(updateFootPositions, 1);
         }
-        // if (data1[index].x_left > 5 && data1[index].x_right > 5) {
-        //     isAnimating1 = false;  // Animation has finished, set flag to false
-        //     return;
-        // }
-        // if (data2[index].x_left > 5 && data2[index].x_right > 5) {
-        //     isAnimating2 = false;  // Animation has finished, set flag to false
-        //     return;
-        // }
 
-        // const currentTime1 = data1[index].time;
-        // const currentTime2 = data2[index].time;
-
-        // // Update positions for first dataset
-        // path1.leftFoot.transition()
-        //     .duration(currentTime1)
-        //     .attr("cx", path1.xScale(data1[index].x_left))
-        //     .attr("cy", path1.yScale(data1[index].y_left));
-        // path1.rightFoot.transition()
-        //     .duration(currentTime1)
-        //     .attr("cx", path1.xScale(data1[index].x_right))
-        //     .attr("cy", path1.yScale(data1[index].y_right));
-
-        // // Update positions for second dataset
-        // path2.leftFoot.transition()
-        //     .duration(currentTime2)
-        //     .attr("cx", path2.xScale(data2[index].x_left))
-        //     .attr("cy", path2.yScale(data2[index].y_left));
-        // path2.rightFoot.transition()
-        //     .duration(currentTime2)
-        //     .attr("cx", path2.xScale(data2[index].x_right))
-        //     .attr("cy", path2.yScale(data2[index].y_right));
-
-        // index++;
-        // animationTimeout = setTimeout(updateFootPositions, 1);
     }
 
     updateFootPositions();
@@ -341,10 +357,10 @@ document.getElementById('file2').addEventListener('change', () => {
 });
 
 // Load default data on page load (no animation)
-loadFootprints("./gait_coordinates/control9_mid.json", "./gait_coordinates/control12_high.json");
+loadFootprints("./gait_coordinates/control14_low.json", "./gait_coordinates/control12_high.json");
 
 // Set dropdown values to match loaded files
-document.getElementById('file1').value = './gait_coordinates/control9_mid.json';
+document.getElementById('file1').value = './gait_coordinates/control14_low.json';
 document.getElementById('file2').value = './gait_coordinates/control12_high.json';
 
 updateGraphLabels();
