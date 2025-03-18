@@ -747,7 +747,7 @@ const descriptions = [
     "Other neurological disorders such as Huntington's Disease also affect Gait due to uncontrollable movement and loss of motor control.",
     "Changes in Gait take many variations whether it's simply walking slower, lack of an arm swing on a single side, shuffling, a forward lean causing quicker steps, and more.",
     "For example, Parkingson's has a gait named after it.\n Parkingsonian Gait is characterized by slow, little, shuffling steps with the body bent forward.",
-    "But there's no cut and dry way to distinguish which disease is being developed. Even within Parkingson's Disease, there are differences in Gait regardless of stage as seen between the mid and advanced stages.",
+    "But there's no cut and dry way to distinguish which disease is being developed. Even within Parkingson's Disease, there are differences in Gait regardless of stage as seen between the mid and advanced stages where you would think the Advanced Stage would be behind.",
     "The same can be said for other neurological disorders such as Amyotrophic Lateral Sclerosis (ALS).",
     "Therefore, Gait analysis can be a window to a person's overall health and can be used to detect early signs of neurological disorders alongside other symptoms such as: memory loss, behavioral changes, and speech/cognitive impairments.",
     "Catching these early signs can lead to a huge difference with early intervention and treatment to slow neurodegeneration within loved ones."
